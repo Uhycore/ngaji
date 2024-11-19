@@ -1,0 +1,32 @@
+[
+    {
+        "userId": 1,
+        "username": "Ariladmin",
+        "password": "1",
+        "role": {
+            "roleId": 1,
+            "roleNama": "Admin",
+            "roleDeskripsi": "Sebagai pengatur semuanya",
+            "roleStatus": 1
+        },
+        "adminId": 1,
+        "adminJenisKelamin": "Laki-laki",
+        "adminAlamat": "Jl. Raya Jakarta",
+        "adminNoTelp": "0123456789"
+    },
+    {
+        "userId": 1,
+        "username": "Mubinadmin",
+        "password": "1",
+        "role": {
+            "roleId": 1,
+            "roleNama": "Admin",
+            "roleDeskripsi": "Sebagai pengatur semuanya",
+            "roleStatus": 1
+        },
+        "adminId": 2,
+        "adminJenisKelamin": "Laki-laki",
+        "adminAlamat": "Jl. Raya Jakarta",
+        "adminNoTelp": "0123456789"
+    }
+]

@@ -1,0 +1,36 @@
+[
+    {
+        "userId": 2,
+        "username": "Arilguru",
+        "password": "1",
+        "role": {
+            "roleId": 2,
+            "roleNama": "Uztad\/Uztadzah",
+            "roleDeskripsi": "Bagian menginputkan data",
+            "roleStatus": 1
+        },
+        "guruId": 1,
+        "guruJenisKelamin": "Laki-laki",
+        "guruTempatTglLahir": "Jakarta\/1 Jan 1990",
+        "guruKelas": "Kelas 1",
+        "guruAlamat": "Jl. Raya Jakarta",
+        "guruNoTelp": "0123456789"
+    },
+    {
+        "userId": 2,
+        "username": "Mubinguru",
+        "password": "1",
+        "role": {
+            "roleId": 2,
+            "roleNama": "Uztad\/Uztadzah",
+            "roleDeskripsi": "Bagian menginputkan data",
+            "roleStatus": 1
+        },
+        "guruId": 2,
+        "guruJenisKelamin": "Laki-laki",
+        "guruTempatTglLahir": "Jakarta\/1 Jan 1990",
+        "guruKelas": "Kelas 2",
+        "guruAlamat": "Jl. Raya Jakarta",
+        "guruNoTelp": "0123456789"
+    }
+]

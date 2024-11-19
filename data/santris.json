@@ -1,0 +1,56 @@
+[
+    {
+        "userId": 3,
+        "username": "Arilsantri",
+        "password": "1",
+        "role": {
+            "roleId": 3,
+            "roleNama": "Santri",
+            "roleDeskripsi": "Santri\/Orang tua santri yang memiliki akun",
+            "roleStatus": 1
+        },
+        "santriId": 1,
+        "santriJenisKelamin": "Laki-laki",
+        "santriTempatTglLahir": "Jakarta",
+        "santriAlamat": "Jl. Raya Jakarta",
+        "santriNamaOrtu": "Aril",
+        "santriNoTelpOrtu": "0123456789",
+        "santriGajiOrtu": "1000000"
+    },
+    {
+        "userId": 3,
+        "username": "Mubin",
+        "password": "1",
+        "role": {
+            "roleId": 3,
+            "roleNama": "Santri",
+            "roleDeskripsi": "Santri\/Orang tua santri yang memiliki akun",
+            "roleStatus": 1
+        },
+        "santriId": 2,
+        "santriJenisKelamin": "Laki-laki",
+        "santriTempatTglLahir": "Jakarta",
+        "santriAlamat": "Jl. Raya Jakarta",
+        "santriNamaOrtu": "Aril",
+        "santriNoTelpOrtu": "0123456789",
+        "santriGajiOrtu": "1000000"
+    },
+    {
+        "userId": 3,
+        "username": "Asyraril",
+        "password": "1",
+        "role": {
+            "roleId": 3,
+            "roleNama": "Santri",
+            "roleDeskripsi": "Santri\/Orang tua santri yang memiliki akun",
+            "roleStatus": 1
+        },
+        "santriId": 3,
+        "santriJenisKelamin": "Laki-laki",
+        "santriTempatTglLahir": "Jakarta",
+        "santriAlamat": "Jl. Raya Jakarta",
+        "santriNamaOrtu": "Aril",
+        "santriNoTelpOrtu": "0123456789",
+        "santriGajiOrtu": "1000000"
+    }
+]

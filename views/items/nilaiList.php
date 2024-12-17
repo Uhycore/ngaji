@@ -48,10 +48,12 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
+
+
                             <?php foreach ($nilaiNodes as $index => $nilai) { ?>
                                 <tr class="transition-all duration-200 hover:bg-gray-50">
                                     <td class="py-4 px-1 text-center font-medium border-r"><?php echo htmlspecialchars($nilai->nilaiId) ?></td>
-                                    <td class="py-4 px-6 font-medium text-center border-r"><?php echo htmlspecialchars($nilai->santri->username) ?></td>
+                                    <td class="py-4 px-6 font-medium text-center border-r"><?php echo htmlspecialchars($nilai->santri['username']) ?></td>
                                     <td class="py-4 px-1 text-center">
                                         <button class="bg-transparent hover:bg-gray-200 p-2 rounded-full transition-all duration-200 ease-in-out transform hover:scale-110"
                                             onclick="openModal('modal-<?php echo $nilai->nilaiId; ?>')">
@@ -60,6 +62,7 @@
                                     </td>
                                 </tr>
                             <?php } ?>
+
                         </tbody>
                     </table>
                 </div>
@@ -77,7 +80,7 @@
                         <table class="min-w-full bg-white">
                             <thead class="bg-gradient-to-r from-gray-800 to-gray-600 text-white">
                                 <tr>
-                                    <th class="py-3 px-2 text-mid font-semibold">ID</th>
+                                    <th class="py-3 px-2 text-mid font-semibold">Id Mapel</th>
                                     <th class="py-3 px-6 text-mid font-semibold">Mapel</th>
                                     <th class="py-3 px-6 text-mid font-semibold">Nilai</th>
                                 </tr>
@@ -85,7 +88,7 @@
                             <tbody class="divide-y divide-gray-200">
                                 <?php foreach ($nilai->detailNilai as $detail) { ?>
                                     <tr>
-                                        <td class="py-3 px-6 text-center text-gray-700"><?php echo htmlspecialchars($detail->detailNilaiId); ?></td>
+                                        <td class="py-3 px-6 text-center text-gray-700"><?php echo htmlspecialchars($detail->mapel->mapelId); ?></td>
                                         <td class="py-3 px-6 text-center text-gray-700"><?php echo htmlspecialchars($detail->mapel->mapelNama); ?></td>
                                         <td class="py-3 px-6 text-center text-gray-700"><?php echo htmlspecialchars($detail->nilai); ?></td>
                                     </tr>

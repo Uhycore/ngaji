@@ -1,3 +1,8 @@
+<?php
+echo "<pre>";
+print_r($_SESSION['username_login']);
+echo "</pre>";
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -102,6 +107,25 @@
                     <p class="mt-2 text-sm font-medium text-gray-500">Add Guru</p>
                 </div>
             </a>
+            <!-- Guru List -->
+            <a href="index.php?modul=bendahara&fitur=list">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">List bendahara</p>
+                </div>
+            </a>
+
+            <!-- bendahara Add -->
+            <a href="index.php?modul=bendahara&fitur=input">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Add bendahara</p>
+                </div>
+            </a>
             <!-- Mapel List -->
             <a href="index.php?modul=mapel&fitur=list">
                 <div class="flex flex-col items-center justify-center">
@@ -119,6 +143,25 @@
                         <i class="fas fa-book-medical"></i>
                     </div>
                     <p class="mt-2 text-sm font-medium text-gray-500">Add Mapel</p>
+                </div>
+            </a>
+            <!-- Rombel List -->
+            <a href="index.php?modul=rombonganBelajar&fitur=list">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">List Rombel</p>
+                </div>
+            </a>
+
+            <!-- Rombel Add -->
+            <a href="index.php?modul=rombonganBelajar&fitur=input">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-book-medical"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Add Rombel</p>
                 </div>
             </a>
 

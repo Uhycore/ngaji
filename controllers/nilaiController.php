@@ -21,6 +21,7 @@ class NilaiController
     {
         try {
             $nilaiNodes = $this->nilaiModel->getAllNilai();
+
             include 'views/items/nilaiList.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -31,13 +32,21 @@ class NilaiController
 
     public function inputNilais()
     {
-        try {
-            $santris = $this->santriModel->getAllSantri();
-            $mapels = $this->mapelModel->getAllmapel();
-            include 'views/items/nilaiInput.php';
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+
+        $objNilai = null;
+
+        if (isset($_GET['santriId'])) {
+            $santriId = $_GET['santriId'];
+
+            $objNilai = $this->nilaiModel->getNilaiBySantriId($santriId);
         }
+
+        $santris = $this->santriModel->getAllSantri();
+        $mapels = $this->mapelModel->getAllmapel();
+        include 'views/items/nilaiInput.php';
+
+
+
         exit;
     }
 
@@ -48,7 +57,7 @@ class NilaiController
             $mapelId = $_POST['mapelId'];
             $nilais = $_POST['nilai'];
 
-
+            // Menyusun detail nilai
             $detail_nilai_data = [];
             $counter = 1;
             foreach ($mapelId as $key => $mapel_id) {
@@ -60,6 +69,7 @@ class NilaiController
                 }
             }
 
+            // Menambahkan atau memperbarui data nilai
             if (!empty($detail_nilai_data)) {
                 $this->nilaiModel->addNilai($santriId, $detail_nilai_data);
                 header("Location: index.php?modul=nilai");
@@ -68,9 +78,9 @@ class NilaiController
             }
         } catch (Exception $e) {
             echo "<script>
-                    alert('Error: " . $e->getMessage() . "');
-                    window.history.back();
-                 </script>";
+                alert('Error: " . $e->getMessage() . "');
+                window.history.back();
+             </script>";
         }
         exit;
     }

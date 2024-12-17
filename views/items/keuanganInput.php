@@ -19,7 +19,7 @@
                 <label for="santriId" class="block text-sm font-medium text-gray-700">Pilih Santri</label>
                 <select id="santriId" name="santriId" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
                     <?php foreach ($santris as $santri): ?>
-                        <option value="<?= $santri->santriId ?>"><?= $santri->username ?></option>
+                        <option value="<?= $santri['santriId'] ?>"><?= $santri['username'] ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

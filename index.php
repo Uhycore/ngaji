@@ -3,6 +3,7 @@ require_once 'controllers/roleController.php';
 require_once 'controllers/adminController.php';
 require_once 'controllers/santriController.php';
 require_once 'controllers/guruController.php';
+require_once 'controllers/bendaharaController.php';
 require_once 'controllers/mapelController.php';
 require_once 'controllers/nilaiController.php';
 require_once 'controllers/keuanganController.php';
@@ -24,6 +25,7 @@ $objRoles = new RoleController();
 $objSantri = new SantriController();
 $objAdmin = new AdminController();
 $objGuru = new GuruController();
+$objBendahara = new BendaharaController();
 $objMapel = new MapelController();
 $objNilai = new NilaiController();
 $objKeuangan = new KeuanganController();
@@ -151,6 +153,33 @@ switch ($modul) {
                 break;
         }
         break;
+    case 'bendahara':
+        $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
+
+        switch ($fitur) {
+            case 'list':
+                $objBendahara->listBendaharas();
+                break;
+            case 'input':
+                include 'views/bendahara/bendaharaInput.php';
+                break;
+            case 'add':
+                $objBendahara->addBendaharas();
+                break;
+            case 'edit':
+                $objBendahara->editById();
+                break;
+            case 'update':
+                $objBendahara->updateBendaharas();
+                break;
+            case 'delete':
+                $objBendahara->deleteBendaharas();
+                break;
+            default:
+                $objBendahara->listBendaharas();
+                break;
+        }
+        break;
 
     case 'mapel':
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
@@ -176,6 +205,7 @@ switch ($modul) {
                 break;
         }
         break;
+    
     case 'nilai':
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
 
@@ -217,25 +247,43 @@ switch ($modul) {
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
         switch ($fitur) {
             case 'profil':
-                $totalNilai = 0;
-                $nilai = $nilai->getNilaiById($santri->santriId);
-
-                foreach ($nilai->detailNilai as $nilaiNode) {
-                    $totalNilai += $nilaiNode->nilai; 
-                }
-
                 include 'views/santri/santriProfilAsSantri.php';
                 break;
             case 'nilai':
-                $nilai = $nilai->getNilaiById($santri->santriId);
+                $nilai = $nilai->getNilaiById($santri['santriId']);
                 include 'views/santri/santriNilaiAsSantri.php';
                 break;
             case 'keuangan':
-                $keuangan = $keuangan->getKeuanganById($santri->santriId);
+                $keuangan = $keuangan->getKeuanganById($santri['santriId']);
                 include 'views/santri/santriKeuanganAsSantri.php';
                 break;
             default:
                 include 'views/santri/santriDashboard.php';
+                break;
+        }
+        break;
+    case 'asGuru':
+        $guru = $_SESSION['username_login'];
+        $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
+        switch ($fitur) {
+            case 'profil':
+                include 'views/guru/guruProfilAsGuru.php';
+                break;
+
+            default:
+                include 'views/guru/guruDashboard.php';
+                break;
+        }
+        break;
+    case 'asBendahara':
+        $bendahara = $_SESSION['username_login'];
+        $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
+        switch ($fitur) {
+            case 'profil':
+                include 'views/bendahara/bendaharaProfilAsBendahara.php';
+                break;
+            default:
+                include 'views/bendahara/bendaharaDashboard.php';
                 break;
         }
         break;

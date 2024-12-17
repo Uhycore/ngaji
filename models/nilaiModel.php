@@ -5,92 +5,172 @@ require_once 'santriModel.php';
 
 class NilaiModel
 {
-    private $nilaiNodes = [];
-    private $nextId = 1;
+    private $mysqli;
 
     public function __construct()
     {
-        $this->loadFromJson();
-    }
+        // Koneksi ke database MySQL
+        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
 
-    public function addNilai($santri, $detailNilaiData)
-    {
-        $dataSantri = new SantriModel();
-        $santri = $dataSantri->getSantriById($santri);
-        $nilaiNode = new NilaiNode($this->nextId++, $santri);
-
-        foreach ($detailNilaiData as $detail) {
-            $detailNilai = new DetailNilaiNode($detail->detailNilaiId, $detail->mapel, $detail->nilai);
-            $nilaiNode->detailNilai[] = $detailNilai;
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
         }
-
-        $this->nilaiNodes[] = $nilaiNode;
-        $this->saveToJson();
     }
 
-    private function saveToJson()
+    // Menambahkan nilai untuk santri
+    public function addNilai($santriId, $detailNilaiData)
     {
-        $jsonData = json_encode($this->nilaiNodes, JSON_PRETTY_PRINT);
-        file_put_contents('data/nilaiData.json', $jsonData);
-    }
+        $stmt = $this->mysqli->prepare("SELECT nilaiId FROM nilai WHERE santriId = ?");
+        $stmt->bind_param("i", $santriId);
+        $stmt->execute();
+        $stmt->store_result();
 
-    private function loadFromJson()
-    {
-        $filePath = 'data/nilaiData.json';
-        if (file_exists($filePath)) {
-            $jsonData = file_get_contents($filePath);
-            $dataArray = json_decode($jsonData, true);
 
-            if ($dataArray) {
-                $dataSantri = new SantriModel();
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($nilaiId);
+            $stmt->fetch();
+            $stmt->close();
 
-                foreach ($dataArray as $data) {
-                    $santri = $dataSantri->getSantriById($data['santri']['santriId']);
-                    $nilaiNode = new NilaiNode($data['nilaiId'], $santri);
+            $this->updateNilai($nilaiId, $detailNilaiData);
+        } else {
+            $stmt = $this->mysqli->prepare("INSERT INTO nilai (santriId) VALUES (?)");
+            $stmt->bind_param("i", $santriId);
+            if ($stmt->execute()) {
+                $nilaiId = $stmt->insert_id;
+                $stmt->close();
 
-                    foreach ($data['detailNilai'] as $detail) {
-                        $mapelObj = new Mapel(
-                            $detail['mapel']['mapelId'],
-                            $detail['mapel']['mapelNama'],
-                            $detail['mapel']['mapelDeskripsi']
-                        );
-                        $detailNilai = new DetailNilaiNode(
-                            $detail['detailNilaiId'],
-                            $mapelObj,
-                            $detail['nilai']);
-                        $nilaiNode->detailNilai[] = $detailNilai;
-                    }
 
-                    $this->nilaiNodes[] = $nilaiNode;
+                foreach ($detailNilaiData as $detail) {
+                    $mapelId = $detail->mapel->mapelId;
+                    $nilai = $detail->nilai;
+
+                    $stmt = $this->mysqli->prepare("INSERT INTO detail_nilai (nilaiId, mapelId, nilai) VALUES (?, ?, ?)");
+                    $stmt->bind_param("iii", $nilaiId, $mapelId, $nilai);
+                    $stmt->execute();
+                    $stmt->close();
                 }
-                $this->nextId = $this->getMaxNilaiId() + 1;
+            } else {
+                throw new Exception("Failed to add nilai.");
             }
         }
     }
 
+    public function updateNilai($nilaiId, $detailNilaiData)
+    {
+        // Update detail nilai berdasarkan nilaiId
+        foreach ($detailNilaiData as $detail) {
+            $mapelId = $detail->mapel->mapelId;
+            $nilai = $detail->nilai;
+
+            $stmt = $this->mysqli->prepare("UPDATE detail_nilai SET nilai = ? WHERE nilaiId = ? AND mapelId = ?");
+            $stmt->bind_param("iii", $nilai, $nilaiId, $mapelId);
+            $stmt->execute();
+            $stmt->close();
+        }
+    }
+
+
+    // Mendapatkan semua nilai
     public function getAllNilai()
     {
-        return $this->nilaiNodes;
+        $result = $this->mysqli->query("SELECT * FROM nilai");
+        $nilaiNodes = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $nilaiId = $row['nilaiId'];
+            $santriId = $row['santriId'];
+
+            $detailNilaiResult = $this->mysqli->query("SELECT dn.*, m.mapelNama FROM detail_nilai dn 
+                                                     JOIN mapels m ON m.mapelId = dn.mapelId
+                                                     WHERE dn.nilaiId = $santriId");
+
+            $detailNilai = [];
+            while ($detailRow = $detailNilaiResult->fetch_assoc()) {
+                $mapel = new Mapel($detailRow['mapelId'], $detailRow['mapelNama'], null);
+                $detailNilai[] = new DetailNilaiNode($detailRow['detailNilaiId'], $mapel, $detailRow['nilai']);
+            }
+
+            $santri = (new SantriModel())->getSantriById($santriId);
+            $nilaiNode = new NilaiNode($santriId, $santri);
+            $nilaiNode->detailNilai = $detailNilai;
+
+            $nilaiNodes[] = $nilaiNode;
+        }
+
+        return $nilaiNodes;
     }
 
     public function getNilaiById($nilaiId)
     {
-        foreach ($this->nilaiNodes as $nilaiNode) {
-            if ($nilaiNode->santri->santriId == $nilaiId) {
-                return $nilaiNode;
+        $stmt = $this->mysqli->prepare("SELECT * FROM nilai WHERE nilaiId = ?");
+        $stmt->bind_param("i", $nilaiId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($row) {
+            $santriId = $row['santriId'];
+            $santri = (new SantriModel())->getSantriById($santriId);
+
+            // Ambil detail nilai terkait
+            $detailNilaiResult = $this->mysqli->query("SELECT dn.*, m.mapelNama FROM detail_nilai dn
+                                                      JOIN mapels m ON m.mapelId = dn.mapelId
+                                                      WHERE dn.nilaiId = $nilaiId");
+
+            $detailNilai = [];
+            while ($detailRow = $detailNilaiResult->fetch_assoc()) {
+                $mapel = new Mapel($detailRow['mapelId'], $detailRow['mapelNama'], null);
+                $detailNilai[] = new DetailNilaiNode($detailRow['detailNilaiId'], $mapel, $detailRow['nilai']);
             }
+
+            $nilaiNode = new NilaiNode($row['nilaiId'], $santri);
+            $nilaiNode->detailNilai = $detailNilai;
+            return $nilaiNode;
         }
+
         return null;
     }
-
-    private function getMaxNilaiId()
+    public function getNilaiBySantriId($santriId)
     {
-        $maxId = 0;
-        foreach ($this->nilaiNodes as $nilaiNode) {
-            if ($nilaiNode->nilaiId > $maxId) {
-                $maxId = $nilaiNode->nilaiId;
-            }
+        $santriId = (int)$santriId; // Pastikan format integer
+        $stmt = $this->mysqli->prepare("SELECT * FROM nilai WHERE santriId = ?");
+        $stmt->bind_param("i", $santriId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+
+            return null;
         }
-        return $maxId;
+
+        $row = $result->fetch_assoc();
+        $stmt->close();
+
+        // Ambil detail nilai
+        $nilaiId = $row['nilaiId'];
+        
+        $detailNilaiResult = $this->mysqli->query("SELECT dn.*, m.mapelNama FROM detail_nilai dn
+                                              JOIN mapels m ON m.mapelId = dn.mapelId
+                                              WHERE dn.nilaiId = $santriId");
+
+        if ($detailNilaiResult->num_rows === 0) {
+
+            return null;
+        }
+
+        $detailNilai = [];
+        while ($detailRow = $detailNilaiResult->fetch_assoc()) {
+            $mapel = new Mapel($detailRow['mapelId'], $detailRow['mapelNama'], null);
+            $detailNilai[] = new DetailNilaiNode($detailRow['detailNilaiId'], $mapel, $detailRow['nilai']);
+        }
+
+        // Ambil informasi santri
+        $santri = (new SantriModel())->getSantriById($santriId);
+
+        // Buat node nilai
+        $nilaiNode = new NilaiNode($row['nilaiId'], $santri);
+        $nilaiNode->detailNilai = $detailNilai;
+        return $nilaiNode;
     }
 }

@@ -15,6 +15,7 @@ class RoleController
     {
         try {
             $Roles = $this->roleModel->getAllRoles();
+           
             include 'views/role/roleList.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();

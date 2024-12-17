@@ -1,145 +1,121 @@
 <?php
-require_once 'config/santriNode.php';
+require_once 'roleModel.php';
 
-class SantriModel 
+class SantriModel
 {
-    private $santris = [];
-    private $nextIdSantri = 1;
+    private $mysqli;
     private $roleModel;
-    private $jsonFilePath = 'data/santris.json';
 
     public function __construct()
     {
+        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
+
         $this->roleModel = new RoleModel();
+        $result = $this->mysqli->query("SELECT COUNT(*) FROM santris");
+        $count = $result->fetch_row()[0];
 
-        if (file_exists($this->jsonFilePath)) {
-            $this->loadFromJsonFile();
-            $this->nextIdSantri = $this->getMaxSantriId() + 1;
-        } else {
-            $this->initializeDefaultUser();
-            $this->saveToJsonFile();
+        if ($count == 0) {
+            $this->initializeDefaultSantri();
         }
     }
 
-    public function initializeDefaultUser()
+    public function initializeDefaultSantri()
     {
-        $this->addSantri('Arilsantri', '1', 3,  'Laki-laki', 'Jakarta', 'Jl. Raya Jakarta', 'Aril', '0123456789', '1000000');
-        $this->addSantri('Mubin', '1', 3,  'Laki-laki', 'Jakarta', 'Jl. Raya Jakarta', 'Aril', '0123456789', '1000000');
-        $this->addSantri('Asyraril', '1', 3, 'Laki-laki', 'Jakarta', 'Jl. Raya Jakarta', 'Aril', '0123456789', '1000000');
+        $this->addSantri('Arilsantri', '1', 3, 'Laki-laki', 'Jakarta, 2000-01-01', 'Jl. Raya Jakarta', 'Aril', '0123456789', 1000000);
+        $this->addSantri('Mubinsantri', '1', 3, 'Laki-laki', 'Jakarta, 2001-02-02', 'Jl. Raya Jakarta', 'Mubin', '0123456789', 1200000);
     }
 
-    public function addSantri($username, $password, $role, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
+    public function addSantri($username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
     {
-        $role = $this->roleModel->getRoleById($role);
-        $santri = new Santri(3, $username, $password, $role, $this->nextIdSantri++, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
-        $this->santris[] = $santri;
-        $this->saveToJsonFile();
-    }
-
-    private function saveToJsonFile()
-    {
-        $santriData = array_map(function ($santri) {
-            return [
-                'userId' => $santri->userId,
-                'username' => $santri->username,
-                'password' => $santri->password,
-                'role' => $santri->role,
-                'santriId' => $santri->santriId,
-                'santriJenisKelamin' => $santri->santriJenisKelamin,
-                'santriTempatTglLahir' => $santri->santriTempatTglLahir,
-                'santriAlamat' => $santri->santriAlamat,
-                'santriNamaOrtu' => $santri->santriNamaOrtu,
-                'santriNoTelpOrtu' => $santri->santriNoTelpOrtu,
-                'santriGajiOrtu' => $santri->santriGajiOrtu,
-            ];
-        }, $this->santris);
-
-        file_put_contents($this->jsonFilePath, json_encode($santriData, JSON_PRETTY_PRINT));
-    }
-
-    private function loadFromJsonFile()
-    {
-        $santriData = json_decode(file_get_contents($this->jsonFilePath), true);
-        if (is_array($santriData)) {
-            foreach ($santriData as $data) {
-                $role = $this->roleModel->getRoleById($data['role']['roleId']);
-                $santri = new Santri(
-                    $data['userId'],
-                    $data['username'],
-                    $data['password'],
-                    $role,
-                    $data['santriId'],
-                    $data['santriJenisKelamin'],
-                    $data['santriTempatTglLahir'],
-                    $data['santriAlamat'],
-                    $data['santriNamaOrtu'],
-                    $data['santriNoTelpOrtu'],
-                    $data['santriGajiOrtu']
-                );
-                $this->santris[] = $santri;
-            }
-        }
+        $stmt = $this->mysqli->prepare("INSERT INTO santris (username, password, roleId, santriJenisKelamin, santriTempatTglLahir, santriAlamat, santriNamaOrtu, santriNoTelpOrtu, santriGajiOrtu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssisssssi", $username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
+        $stmt->execute();
+        $stmt->close();
     }
 
     public function getAllSantri()
     {
-        return $this->santris;
-    }
+        $result = $this->mysqli->query("SELECT * FROM santris");
+        $santris = [];
 
-    private function getMaxSantriId()
-    {
-        $maxId = 0;
-        foreach ($this->santris as $santri) {
-            if ($santri->santriId > $maxId) {
-                $maxId = $santri->santriId;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $role = $this->roleModel->getRoleById(3);
+            $santris[] = [
+                'santriId' => $row['santriId'],
+                'username' => $row['username'],
+                'password' => $row['password'],
+                'roleId' => $role,
+                'santriJenisKelamin' => $row['santriJenisKelamin'],
+                'santriTempatTglLahir' => $row['santriTempatTglLahir'],
+                'santriAlamat' => $row['santriAlamat'],
+                'santriNamaOrtu' => $row['santriNamaOrtu'],
+                'santriNoTelpOrtu' => $row['santriNoTelpOrtu'],
+                'santriGajiOrtu' => $row['santriGajiOrtu']
+            ];
         }
-        return $maxId;
+
+        return $santris;
     }
 
     public function getSantriById($santriId)
     {
-        foreach ($this->santris as $santri) {
-            if ($santri->santriId == $santriId) {
-                return $santri;
-            }
+        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE santriId = ?");
+        $stmt->bind_param("i", $santriId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $santri = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($santri) {
+            $role = $this->roleModel->getRoleById(3);
+
+            return [
+                'santriId' => $santri['santriId'],
+                'username' => $santri['username'],
+                'password' => $santri['password'],
+                'roleId' => $role,
+                'santriJenisKelamin' => $santri['santriJenisKelamin'],
+                'santriTempatTglLahir' => $santri['santriTempatTglLahir'],
+                'santriAlamat' => $santri['santriAlamat'],
+                'santriNamaOrtu' => $santri['santriNamaOrtu'],
+                'santriNoTelpOrtu' => $santri['santriNoTelpOrtu'],
+                'santriGajiOrtu' => $santri['santriGajiOrtu']
+            ];
         }
+
         return null;
     }
+
 
     public function getSantriByUsername($username)
     {
-        foreach ($this->santris as $santri) {
-            if ($santri->username == $username) {
-                return $santri;
-            }
-        }
-        return null;
+        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $santri = $result->fetch_assoc();
+        $stmt->close();
+
+        return $santri;
     }
 
-    public function updateSantri($username, $password, $santriId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
+    public function updateSantri($santriId, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
     {
-        $santri = $this->getSantriById($santriId);
-
-        $santri->username = $username;
-        $santri->password = $password;
-        $santri->santriJenisKelamin = $santriJenisKelamin;
-        $santri->santriTempatTglLahir = $santriTempatTglLahir;
-        $santri->santriAlamat = $santriAlamat;
-        $santri->santriNamaOrtu = $santriNamaOrtu;
-        $santri->santriNoTelpOrtu = $santriNoTelpOrtu;
-        $santri->santriGajiOrtu = $santriGajiOrtu;
-        $this->saveToJsonFile();
+        $stmt = $this->mysqli->prepare("UPDATE santris SET username = ?, password = ?, santriJenisKelamin = ?, santriTempatTglLahir = ?, santriAlamat = ?, santriNamaOrtu = ?, santriNoTelpOrtu = ?, santriGajiOrtu = ? WHERE santriId = ?");
+        $stmt->bind_param("sssssssii", $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $santriId);
+        $stmt->execute();
+        $stmt->close();
     }
 
     public function deleteSantri($santriId)
     {
-        $santri = $this->getSantriById($santriId);
-        $index = array_search($santri, $this->santris);
-        if ($index !== false) {
-            unset($this->santris[$index]);
-            $this->santris = array_values($this->santris);
-            $this->saveToJsonFile();
-        }
+        $stmt = $this->mysqli->prepare("DELETE FROM santris WHERE santriId = ?");
+        $stmt->bind_param("i", $santriId);
+        $stmt->execute();
+        $stmt->close();
     }
 }

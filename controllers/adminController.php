@@ -15,6 +15,7 @@ class AdminController
     {
         try {
             $admins = $this->adminModel->getAllAdmins();
+
             include 'views/admin/adminList.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -63,9 +64,9 @@ class AdminController
             $adminId = $_POST['adminId'];
             $username = $_POST['username'];
             $password = $_POST['password'];
-            $jenisKelamin = $_POST['jenisKelamin'];
-            $alamat = $_POST['alamat'];
-            $noTelp = $_POST['noTelp'];
+            $jenisKelamin = $_POST['adminJenisKelamin'];
+            $alamat = $_POST['adminAlamat'];
+            $noTelp = $_POST['adminNoTelp'];
 
             $this->adminModel->updateAdmin($adminId, $username, $password, $jenisKelamin, $alamat, $noTelp);
 

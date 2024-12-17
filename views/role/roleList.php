@@ -48,22 +48,22 @@
                         <tbody class="bg-white">
                             <?php foreach ($Roles as $index => $role) { ?>
                                 <tr class="border-t border-b transition-all duration-300 ease-in-out <?php echo $index % 2 == 1 ? 'bg-gray-200' : ''; ?>">
-                                    <td class="py-4 px-2 text-black-500 text-center font-bold border-r border-gray-300"><?php echo htmlspecialchars($role->roleId) ?></td>
-                                    <td class="py-4 px-6 font-medium border-r border-gray-300"><?php echo htmlspecialchars($role->roleNama) ?></td>
-                                    <td class="py-4 px-6 font-medium border-r border-gray-300"><?php echo htmlspecialchars($role->roleDeskripsi) ?></td>
+                                    <td class="py-4 px-2 text-black-500 text-center font-bold border-r border-gray-300"><?php echo htmlspecialchars($role['roleId']) ?></td>
+                                    <td class="py-4 px-6 font-medium border-r border-gray-300"><?php echo htmlspecialchars($role['roleNama']) ?></td>
+                                    <td class="py-4 px-6 font-medium border-r border-gray-300"><?php echo htmlspecialchars($role['roleDeskripsi']) ?></td>
                                     <td class="py-4 px-2 font-medium text-center border-r border-gray-300">
-                                        <span class="inline-block px-2 py-1 font-semibold leading-tight text-white rounded-full <?php echo $role->roleStatus ? 'bg-green-500' : 'bg-red-500'; ?>">
-                                            <?php echo $role->roleStatus ? 'Active' : 'Inactive'; ?>
+                                        <span class="inline-block px-2 py-1 font-semibold leading-tight text-white rounded-full <?php echo $role['roleStatus'] ? 'bg-green-500' : 'bg-red-500'; ?>">
+                                            <?php echo $role['roleStatus'] ? 'Active' : 'Inactive'; ?>
                                         </span>
                                     </td>
                                     <td class="py-4 px-6 flex justify-center space-x-2 border-gray-300">
-                                        <form action="index.php?modul=role&fitur=edit&roleId=<?= $role->roleId ?>" method="POST" class="inline">
+                                        <form action="index.php?modul=role&fitur=edit&roleId=<?= $role['roleId'] ?>" method="POST" class="inline">
                                             <button type="submit" class="bg-transparent hover:bg-gray-200 p-1 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-110">
                                                 <i class="fas fa-edit text-green-500 hover:text-green-700 w-4 h-4"></i>
                                             </button>
                                         </form>
                                         <form action="index.php?modul=role&fitur=delete" method="POST" class="inline">
-                                            <input type="hidden" name="roleId" value="<?php echo $role->roleId; ?>">
+                                            <input type="hidden" name="roleId" value="<?php echo $role['roleId']; ?>">
                                             <button type="submit" class="bg-transparent hover:bg-gray-200 p-1 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-110">
                                                 <i class="fas fa-trash-alt text-red-500 hover:text-red-700 w-4 h-4"></i>
                                             </button>

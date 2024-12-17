@@ -10,7 +10,6 @@ echo "</pre>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -23,30 +22,8 @@ echo "</pre>";
     <div class="flex justify-center items-center min-h-screen h-full">
         <!-- Logo Lingkaran -->
         <div class="grid grid-cols-3 gap-4 mb-8">
-
-
-
-            <!-- Santri Nilai -->
-            <a href="index.php?modul=asSantri&fitur=nilai">
-                <div class="flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <p class="mt-2 text-sm font-medium text-gray-500">Nilai</p>
-                </div>
-            </a>
-
-            <!-- Keuangan List -->
-            <a href="index.php?modul=asSantri&fitur=keuangan">
-                <div class="flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <p class="mt-2 text-sm font-medium text-gray-500">Keuangan</p>
-                </div>
-            </a>
             <!-- Profil -->
-            <a href="index.php?modul=asSantri&fitur=profil">
+            <a href="index.php?modul=asGuru&fitur=profil">
                 <div class="flex flex-col items-center justify-center">
                     <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
                         <i class="fa-regular fa-user"></i>
@@ -54,11 +31,28 @@ echo "</pre>";
                     <p class="mt-2 text-sm font-medium text-gray-500">Profil</p>
                 </div>
             </a>
+            <!-- Santri Nilai -->
+            <a href="index.php?modul=nilai&fitur=list">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Nilai Santri</p>
+                </div>
+            </a>
 
-
+            <!-- Santri Add Nilai -->
+            <a href="index.php?modul=nilai&fitur=input">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Add Nilai Santri</p>
+                </div>
+            </a>
+            
         </div>
     </div>
-
 </body>
 
 </html>

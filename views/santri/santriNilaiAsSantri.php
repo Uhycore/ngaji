@@ -18,8 +18,8 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="m-6 rounded-lg mt-10 border border-gray-300 bg-white p-6 shadow-md">
-        <h2 class="text-2xl font-semibold text-blue-800 mb-4 border-b border-gray-300 pb-2">Nilai:</h2>
+    <div class="m-6 max-w-6xl mx-auto rounded-lg mt-10 border border-gray-300 bg-white p-6 shadow-md">
+        <h2 class="text-2xl font-semibold text-blue-800 mb-6 border-b border-gray-300 pb-2">Nilai Santri</h2>
 
         <!-- Jika Tidak Ada Nilai -->
         <?php if (empty($nilai->detailNilai)): ?>
@@ -27,21 +27,21 @@
         <?php else: ?>
             <!-- Tabel Nilai -->
             <div class="overflow-x-auto">
-                <table class="min-w-full table-auto border border-gray-300">
-                    <thead class="bg-gray-200 text-gray-700 border-b border-gray-300">
+                <table class="min-w-full table-auto border-collapse text-gray-700">
+                    <thead class="bg-blue-100 text-gray-700 border-b border-gray-300">
                         <tr>
-                            <th class="px-1 py-2 text-left border-r border-gray-300">ID</th>
-                            <th class="px-4 py-2 text-left border-r border-gray-300">Mata Pelajaran</th>
-                            <th class="px-4 py-2 text-left">Nilai</th>
+                            <th class="px-1 py-3 text-center border-r border-gray-300">Id Mapel</th>
+                            <th class="px-6 py-3 text-left border-r border-gray-300">Mata Pelajaran</th>
+                            <th class="px-6 py-3 text-left">Nilai</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $isEven = false; ?>
                         <?php foreach ($nilai->detailNilai as $detailNilai): ?>
-                            <tr class="border-b border-gray-300 hover:bg-gray-50 transition duration-300 <?php echo $isEven ? 'bg-gray-100' : ''; ?>">
-                                <td class="px-1 py-2 border-r border-gray-300"><?php echo htmlspecialchars($detailNilai->detailNilaiId); ?></td>
-                                <td class="px-4 py-2 border-r border-gray-300"><?php echo htmlspecialchars($detailNilai->mapel->mapelNama); ?></td>
-                                <td class="px-4 py-2"><?php echo htmlspecialchars($detailNilai->nilai); ?></td>
+                            <tr class="border-b border-gray-300 hover:bg-gray-50 transition duration-300 <?php echo $isEven ? 'bg-gray-50' : ''; ?>">
+                                <td class="px-1 py-3 text-center border-r border-gray-300"><?php echo htmlspecialchars($detailNilai->mapel->mapelId); ?></td>
+                                <td class="px-6 py-3 border-r border-gray-300"><?php echo htmlspecialchars($detailNilai->mapel->mapelNama); ?></td>
+                                <td class="px-6 py-3"><?php echo htmlspecialchars($detailNilai->nilai); ?></td>
                             </tr>
                             <?php $isEven = !$isEven; ?>
                         <?php endforeach; ?>

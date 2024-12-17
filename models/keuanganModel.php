@@ -5,90 +5,105 @@ require_once 'santriModel.php';
 
 class KeuanganModel
 {
-    private $keuanganNodes = [];
-    private $nextId = 1;
+    private $mysqli;
 
     public function __construct()
     {
-        $this->loadFromJson();
+        // Koneksi ke database MySQL
+        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
     }
 
+    // Menambahkan data keuangan dan detail keuangan
     public function addKeuangan($santriId, $detailKeuanganData)
     {
-        $dataSantri = new SantriModel();
-        $santri = $dataSantri->getSantriById($santriId);
-        $keuanganNode = new KeuanganNode($this->nextId++, $santri);
+        // Insert ke tabel keuangan
+        $stmt = $this->mysqli->prepare("INSERT INTO keuangan (santriId) VALUES (?)");
+        $stmt->bind_param("i", $santriId);
+        if ($stmt->execute()) {
+            $keuanganId = $stmt->insert_id; // Dapatkan ID keuangan baru
+            $stmt->close();
 
-        foreach ($detailKeuanganData as $detail) {
-            $detailKeuangan = new DetailKeuanganNode($detail->detailKeuanganId, $detail->tanggal, $detail->nominal);
-            $keuanganNode->detailKeuangan[] = $detailKeuangan;
-        }
+            // Insert ke tabel detail_keuangan
+            foreach ($detailKeuanganData as $detail) {
+                $tanggal = $detail->tanggal;
+                $nominal = $detail->nominal;
 
-        $this->keuanganNodes[] = $keuanganNode;
-
-        $this->saveToJson();
-    }
-
-    private function saveToJson()
-    {
-        $jsonData = json_encode($this->keuanganNodes, JSON_PRETTY_PRINT);
-        file_put_contents('data/keuanganData.json', $jsonData);
-    }
-
-    private function loadFromJson()
-    {
-        $filePath = 'data/keuanganData.json';
-
-        if (file_exists($filePath)) {
-            $jsonData = file_get_contents($filePath);
-            $dataArray = json_decode($jsonData, true);
-
-            if ($dataArray) {
-                $dataSantri = new SantriModel();
-
-                foreach ($dataArray as $data) {
-                    $santri = $dataSantri->getSantriById($data['santri']['santriId']);
-                    $keuanganNode = new KeuanganNode($data['keuanganId'], $santri);
-
-                    foreach ($data['detailKeuangan'] as $detail) {
-                        $detailKeuangan = new DetailKeuanganNode(
-                            $detail['detailKeuanganId'],
-                            $detail['tanggal'],
-                            $detail['nominal']
-                        );
-                        $keuanganNode->detailKeuangan[] = $detailKeuangan;
-                    }
-
-                    $this->keuanganNodes[] = $keuanganNode;
-                }
-                $this->nextId = $this->getMaxKeuanganId() + 1;
+                $stmt = $this->mysqli->prepare("INSERT INTO detail_keuangan (keuanganId, tanggal, nominal) VALUES (?, ?, ?)");
+                $stmt->bind_param("isd", $keuanganId, $tanggal, $nominal);
+                $stmt->execute();
+                $stmt->close();
             }
+        } else {
+            throw new Exception("Failed to add keuangan.");
         }
     }
 
+    // Mendapatkan semua data keuangan
     public function getAllKeuangan()
     {
-        return $this->keuanganNodes;
+        $result = $this->mysqli->query("SELECT * FROM keuangan");
+        $keuanganNodes = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $keuanganId = $row['keuanganId'];
+            $santriId = $row['santriId'];
+
+            // Ambil detail keuangan
+            $detailResult = $this->mysqli->query("SELECT * FROM detail_keuangan WHERE keuanganId = $keuanganId");
+            $detailKeuangan = [];
+            while ($detailRow = $detailResult->fetch_assoc()) {
+                $detailKeuangan[] = new DetailKeuanganNode(
+                    $detailRow['detailKeuanganId'],
+                    $detailRow['tanggal'],
+                    $detailRow['nominal']
+                );
+            }
+
+            $santri = (new SantriModel())->getSantriById($santriId);
+            $keuanganNode = new KeuanganNode($keuanganId, $santri);
+            $keuanganNode->detailKeuangan = $detailKeuangan;
+
+            $keuanganNodes[] = $keuanganNode;
+        }
+
+        return $keuanganNodes;
     }
 
+    // Mendapatkan data keuangan berdasarkan ID
     public function getKeuanganById($keuanganId)
     {
-        foreach ($this->keuanganNodes as $keuanganNode) {
-            if ($keuanganNode->santri->santriId == $keuanganId) {
-                return $keuanganNode;
-            }
-        }
-        return null;
-    }
+        $stmt = $this->mysqli->prepare("SELECT * FROM keuangan WHERE keuanganId = ?");
+        $stmt->bind_param("i", $keuanganId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
 
-    private function getMaxKeuanganId()
-    {
-        $maxId = 0;
-        foreach ($this->keuanganNodes as $keuanganNode) {
-            if ($keuanganNode->keuanganId > $maxId) {
-                $maxId = $keuanganNode->keuanganId;
+        if ($row) {
+            $santriId = $row['santriId'];
+            $santri = (new SantriModel())->getSantriById($santriId);
+
+            // Ambil detail keuangan
+            $detailResult = $this->mysqli->query("SELECT * FROM detail_keuangan WHERE keuanganId = $keuanganId");
+            $detailKeuangan = [];
+            while ($detailRow = $detailResult->fetch_assoc()) {
+                $detailKeuangan[] = new DetailKeuanganNode(
+                    $detailRow['detailKeuanganId'],
+                    $detailRow['tanggal'],
+                    $detailRow['nominal']
+                );
             }
+
+            $keuanganNode = new KeuanganNode($keuanganId, $santri);
+            $keuanganNode->detailKeuangan = $detailKeuangan;
+
+            return $keuanganNode;
         }
-        return $maxId;
+
+        return null;
     }
 }

@@ -44,7 +44,7 @@ class MapelController
     {
         try {
             $mapelId = $_GET['mapelId'];
-            $this->mapelModel->getMapelById($mapelId);
+            $objMapels = $this->mapelModel->getMapelById($mapelId);
 
             include 'views/items/mapelUpdate.php';
         } catch (Exception $e) {

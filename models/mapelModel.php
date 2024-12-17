@@ -3,117 +3,126 @@ require_once 'config/mapelNode.php';
 
 class MapelModel
 {
-    private $mapels = [];
-    private $nextId = 1;
-    private $jsonFilePath = 'data/mapels.json';
+    private $mysqli;
 
     public function __construct()
     {
-        if (file_exists($this->jsonFilePath)) {
-            $this->loadFromJsonFile();
-            $this->nextId = $this->getMaxMapelId() + 1;
-        } else {
+        // Menghubungkan ke database MySQL
+        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+
+        if ($this->mysqli->connect_error) {
+            die("Connection failed: " . $this->mysqli->connect_error);
+        }
+
+        // Mengecek apakah tabel mapels kosong dan menginisialisasi data default jika perlu
+        $result = $this->mysqli->query("SELECT COUNT(*) FROM mapels");
+        $count = $result->fetch_row()[0];
+
+        if ($count == 0) {
             $this->initializeDefaultMapel();
-            $this->saveToJsonFile();
         }
     }
 
+    // Menambahkan mapel default jika tabel kosong
     public function initializeDefaultMapel()
     {
-        $this->addMapel('An-nas', 'Al-Qur\'an');
-        $this->addMapel('Al-falaq', 'Al-Qur\'an');
-        $this->addMapel('Al-ikhlas', 'Al-Qur\'an');
+        $this->addMapel('turutan', 'Turutan');
+        $this->addMapel('iqra', 'Iqra');
+        $this->addMapel('jus-Amma', 'Jus Amma');
+        $this->addMapel('Al-Quran', 'Al-Quran');
+        $this->addMapel('Tajwid', 'Tajwid');
+        $this->addMapel('Al-Fiqh', 'Al-Fiqh');
+        $this->addMapel('Sejarah', 'Sejarah');
+
     }
 
+    // Menambahkan mapel baru ke database
     public function addMapel($mapelNama, $mapelDeskripsi)
     {
-        $mapel = new Mapel($this->nextId++, $mapelNama, $mapelDeskripsi);
-        $this->mapels[] = $mapel;
-        $this->saveToJsonFile();
+        $stmt = $this->mysqli->prepare("INSERT INTO mapels (mapelNama, mapelDeskripsi) VALUES (?, ?)");
+        $stmt->bind_param("ss", $mapelNama, $mapelDeskripsi);
+        $stmt->execute();
+        $stmt->close();
     }
 
-    private function saveToJsonFile()
+    // Mendapatkan semua mapel
+    public function getAllMapel()
     {
-        $mapelsArray = array_map(function ($mapel) {
-            return [
-                'mapelId' => $mapel->mapelId,
-                'mapelNama' => $mapel->mapelNama,
-                'mapelDeskripsi' => $mapel->mapelDeskripsi,
-            ];
-        }, $this->mapels);
+        $result = $this->mysqli->query("SELECT * FROM mapels");
+        $mapels = [];
 
-        file_put_contents($this->jsonFilePath, json_encode($mapelsArray, JSON_PRETTY_PRINT));
-    }
-
-    private function loadFromJsonFile()
-    {
-        $data = json_decode(file_get_contents($this->jsonFilePath), true);
-        if ($data) {
-            $this->mapels = array_map(function ($item) {
-                return new Mapel($item['mapelId'], $item['mapelNama'], $item['mapelDeskripsi']);
-            }, $data);
+        while ($row = $result->fetch_assoc()) {
+            $mapels[] = new Mapel(
+                $row['mapelId'],
+                $row['mapelNama'],
+                $row['mapelDeskripsi']
+            );
         }
+
+        return $mapels;
     }
 
-    public function getAllmapel()
-    {
-        return $this->mapels;
-    }
-
+    // Mendapatkan mapel berdasarkan ID
     public function getMapelById($mapelId)
     {
-        foreach ($this->mapels as $mapel) {
-            if ($mapel->mapelId == $mapelId) {
-                return $mapel;
-            }
+        $stmt = $this->mysqli->prepare("SELECT * FROM mapels WHERE mapelId = ?");
+        $stmt->bind_param("i", $mapelId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $mapel = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($mapel) {
+            return new Mapel(
+                $mapel['mapelId'],
+                $mapel['mapelNama'],
+                $mapel['mapelDeskripsi']
+            );
         }
+
         return null;
     }
 
     public function updateMapel($mapelId, $mapelNama, $mapelDeskripsi)
     {
-        foreach ($this->mapels as $mapel) {
-            if ($mapel->mapelId == $mapelId) {
-                $mapel->mapelNama = $mapelNama;
-                $mapel->mapelDeskripsi = $mapelDeskripsi;
-                $this->saveToJsonFile();
-                return true;
-            }
-        }
-        return false;
+        $stmt = $this->mysqli->prepare("UPDATE mapels SET mapelNama = ?, mapelDeskripsi = ? WHERE mapelId = ?");
+        $stmt->bind_param("ssi", $mapelNama, $mapelDeskripsi, $mapelId);
+        $stmt->execute();
+        $stmt->close();
     }
 
     public function deleteMapel($mapelId)
     {
-        foreach ($this->mapels as $key => $mapel) {
-            if ($mapel->mapelId == $mapelId) {
-                unset($this->mapels[$key]);
-                $this->mapels = array_values($this->mapels);
-                $this->saveToJsonFile();
-                return true;
-            }
-        }
-        return false;
+        $stmt = $this->mysqli->prepare("DELETE FROM detail_nilai WHERE mapelId = ?");
+        $stmt->bind_param("i", $mapelId);
+        $stmt->execute();
+        $stmt->close();
+        
+        $stmt = $this->mysqli->prepare("DELETE FROM mapels WHERE mapelId = ?");
+        $stmt->bind_param("i", $mapelId);
+        $stmt->execute();
+        $stmt->close();
     }
 
+
+    // Mendapatkan mapel berdasarkan nama
     public function getMapelByNama($mapelNama)
     {
-        foreach ($this->mapels as $mapel) {
-            if ($mapel->mapelNama == $mapelNama) {
-                return $mapel;
-            }
-        }
-        return null;
-    }
+        $stmt = $this->mysqli->prepare("SELECT * FROM mapels WHERE mapelNama = ?");
+        $stmt->bind_param("s", $mapelNama);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $mapel = $result->fetch_assoc();
+        $stmt->close();
 
-    private function getMaxMapelId()
-    {
-        $maxId = 0;
-        foreach ($this->mapels as $mapel) {
-            if ($mapel->mapelId > $maxId) {
-                $maxId = $mapel->mapelId;
-            }
+        if ($mapel) {
+            return new Mapel(
+                $mapel['mapelId'],
+                $mapel['mapelNama'],
+                $mapel['mapelDeskripsi']
+            );
         }
-        return $maxId;
+
+        return null;
     }
 }

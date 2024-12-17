@@ -31,7 +31,7 @@ class SantriController
             $santriNamaOrtu = $_POST['santriNamaOrtu'];
             $santriNoTelpOrtu = $_POST['santriNoTelpOrtu'];
             $santriGajiOrtu = $_POST['santriGajiOrtu'];
-            
+
             $this->santriModel->addSantri($username, $password, 3, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
 
             echo "<script>
@@ -71,7 +71,7 @@ class SantriController
             $santriNoTelpOrtu = $_POST['santriNoTelpOrtu'];
             $santriGajiOrtu = $_POST['santriGajiOrtu'];
 
-            $this->santriModel->updateSantri($username, $password, $santriId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
+            $this->santriModel->updateSantri($santriId, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
 
             echo "<script>
                     alert('Santri berhasil diperbarui!');

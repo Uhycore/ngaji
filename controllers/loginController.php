@@ -2,18 +2,21 @@
 include_once 'models/santriModel.php';
 include_once 'models/guruModel.php';
 include_once 'models/adminModel.php';
-
+include_once 'models/bendaharaModel.php';
 
 class loginController
 {
     private $santriModel;
     private $guruModel;
     private $adminModel;
+    private $bendaharaModel;
+
     public function __construct()
     {
         $this->santriModel = new SantriModel();
         $this->guruModel = new GuruModel();
         $this->adminModel = new AdminModel();
+        $this->bendaharaModel = new BendaharaModel();
     }
 
     public function login()
@@ -25,38 +28,42 @@ class loginController
         $guru = $this->guruModel->getGuruByUsername($username);
         $admin = $this->adminModel->getAdminByUsername($username);
 
-        if ($santri) {
-            if ($santri->password == $password && $santri->role->roleId == 3) {
-                $_SESSION['username_login'] = $santri;
-                header("Location: index.php?modul=null");
-                exit();
-            } else {
-                return "Password atau role tidak sesuai.";
-            }
-        } elseif ($guru) {
-            if ($guru->password == $password && $guru->role->roleId == 2) {
-                $_SESSION['username_login'] = $guru;
-                header("Location: index.php?modul=null");
-                exit();
-            } else {
-                return "Password atau role tidak sesuai.";
-            }
-        } elseif ($admin) {
-            if ($admin->password == $password && $admin->role->roleId == 1) {
-                $_SESSION['username_login'] = $admin;
-                header("Location: index.php?modul=null");
-                exit();
-            } else {
-                return "Password atau role tidak sesuai.";
-            }
+        $bendahara = $this->bendaharaModel->getBendaharaByUsername($username);
+
+        if ($bendahara && $bendahara['password'] == $password && $bendahara['roleId'] == 4) {
+            $objBendahara = $this->bendaharaModel->getBendaharaById($bendahara['bendaharaId']);
+            $_SESSION['username_login'] = $objBendahara;
+            header("Location: index.php?modul=null");
+            exit();
+        } elseif ($santri && $santri['password'] == $password && $santri['roleId'] == 3) {
+            $objSantri = $this->santriModel->getSantriById($santri['santriId']);
+           
+            $_SESSION['username_login'] = $objSantri;
+            header("Location: index.php?modul=null");
+            exit();
+        } elseif ($guru && $guru['password'] == $password && $guru['roleId'] == 2) {
+            $objGuru = $this->guruModel->getGuruById($guru['guruId']);
+            $_SESSION['username_login'] = $objGuru;
+            header("Location: index.php?modul=null");
+            exit();
+        } elseif ($admin && $admin['password'] == $password && $admin['roleId'] == 1) {
+            $objAdmin = $this->adminModel->getAdminById($admin['adminId']);
+            $_SESSION['username_login'] = $objAdmin;
+            header("Location: index.php?modul=null");
+            exit();
         } else {
-            return "Username tidak ditemukan.";
+            echo "<script>
+            alert('salah brooo!');
+            
+            </script>";
+            $this->checkLogin();
+            exit();
         }
-        exit();
     }
 
     public function logout()
     {
+
         unset($_SESSION['username_login']);
 
         echo "<script>
@@ -69,16 +76,17 @@ class loginController
 
     public function checkLogin()
     {
-        if (isset($_SESSION['username_login']) && $_SESSION['username_login']->role->roleId == 3) {
-            // echo "<script>alert('Selamat datang, " . $_SESSION['username_login']->username . "!');</script>";
+
+        if (isset($_SESSION['username_login']) && $_SESSION['username_login']['roleId']['roleId'] == 4) {
+            include 'views/bendahara/bendaharaDashboard.php';
+            exit();
+        } elseif (isset($_SESSION['username_login']) && $_SESSION['username_login']['roleId']['roleId'] == 3) {
             include 'views/santri/santriDashboard.php';
             exit();
-        } else if (isset($_SESSION['username_login']) && $_SESSION['username_login']->role->roleId == 2) {
-            // echo "<script>alert('Selamat datang, " . $_SESSION['username_login']->username . "!');</script>";
-            include 'views/role/roleDashboard.php';
+        } elseif (isset($_SESSION['username_login']) && $_SESSION['username_login']['roleId']['roleId'] == 2) {
+            include 'views/guru/guruDashboard.php';
             exit();
-        } else if (isset($_SESSION['username_login']) && $_SESSION['username_login']->role->roleId == 1) {
-            // echo "<script>alert('Selamat datang, " . $_SESSION['username_login']->username . "!');</script>";
+        } elseif (isset($_SESSION['username_login']) && $_SESSION['username_login']['roleId']['roleId'] == 1) {
             include 'views/role/roleDashboard.php';
             exit();
         }

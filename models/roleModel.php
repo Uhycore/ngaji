@@ -1,5 +1,4 @@
 <?php
-require_once 'config/roleNode.php';
 
 class RoleModel
 {
@@ -23,16 +22,10 @@ class RoleModel
 
     public function initializeDefaultRole()
     {
-        $defaultRoles = [
-            ["Admin", "Sebagai pengatur semuanya", 1],
-            ["Uztad/Uztadzah", "Bagian menginputkan data", 1],
-            ["Santri", "Santri/Orang tua santri yang memiliki akun", 1],
-            ["Bendahara", "Menginputkan data keuangan", 1]
-        ];
-
-        foreach ($defaultRoles as $role) {
-            $this->addRole($role[0], $role[1], $role[2]);
-        }
+        $this->addRole('Admin', 'Admin', 1);
+        $this->addRole('Uztad/Uztadzah', 'Uztad/Uztadzah', 1);
+        $this->addRole('Santri', 'Santri', 1);
+        $this->addRole('Bendahara', 'Bendahara', 1);
     }
 
     public function addRole($roleNama, $roleDeskripsi, $roleStatus)
@@ -47,14 +40,13 @@ class RoleModel
     {
         $result = $this->mysqli->query("SELECT * FROM roles");
         $roles = [];
-
         while ($row = $result->fetch_assoc()) {
-            $roles[] = new Role(
-                $row['roleId'],
-                $row['roleNama'],
-                $row['roleDeskripsi'],
-                $row['roleStatus']
-            );
+            $roles[] = [
+                'roleId' => $row['roleId'],
+                'roleNama' => $row['roleNama'],
+                'roleDeskripsi' => $row['roleDeskripsi'],
+                'roleStatus' => $row['roleStatus']
+            ];
         }
 
         return $roles;
@@ -69,16 +61,8 @@ class RoleModel
         $role = $result->fetch_assoc();
         $stmt->close();
 
-        if ($role) {
-            return new Role(
-                $role['roleId'],
-                $role['roleNama'],
-                $role['roleDeskripsi'],
-                $role['roleStatus']
-            );
-        }
 
-        return null;
+        return $role;
     }
 
     public function updateRole($roleId, $roleNama, $roleDeskripsi, $roleStatus)
@@ -106,16 +90,7 @@ class RoleModel
         $role = $result->fetch_assoc();
         $stmt->close();
 
-        if ($role) {
-            return new Role(
-                $role['roleId'],
-                $role['roleNama'],
-                $role['roleDeskripsi'],
-                $role['roleStatus']
-            );
-        }
-
-        return null;
+        return $role;
     }
 
     public function resetRoles()

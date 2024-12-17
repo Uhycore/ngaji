@@ -51,7 +51,7 @@
                             <?php foreach ($keuanganNodes as $keuanganNode) { ?>
                                 <tr class="transition-all duration-200 hover:bg-gray-50">
                                     <td class="py-4 px-1 text-center font-medium border-r"><?= htmlspecialchars($keuanganNode->keuanganId) ?></td>
-                                    <td class="py-4 px-6 font-medium text-center border-r"><?= htmlspecialchars($keuanganNode->santri->username) ?></td>
+                                    <td class="py-4 px-6 font-medium text-center border-r"><?= htmlspecialchars($keuanganNode->santri['username']) ?></td>
                                     <td class="py-4 px-1 text-center">
                                         <button class="bg-transparent hover:bg-gray-200 p-2 rounded-full transition-all duration-200 ease-in-out transform hover:scale-110"
                                             onclick="openModal('modal-<?= $keuanganNode->keuanganId ?>')">

@@ -63,6 +63,15 @@
                     <h1 class="text-2xl font-semibold text-gray-800">Data Santri :</h1>
                 </div>
 
+                <!-- Kelas -->
+                <div class="grid grid-cols-7 font-medium text-gray-700 mb-4 p-4 border border-gray-300 rounded-lg shadow-md">
+                    <div class="text-right col-span-2">
+                        <strong>Kelas</strong>
+                    </div>
+                    <div class="text-left pl-10 col-span-5">
+                        <span><?php echo htmlspecialchars($santri['idKelas']['namaKelas']); ?></span>
+                    </div>
+                </div>
                 <!-- Jenis Kelamin -->
                 <div class="grid grid-cols-7 font-medium text-gray-700 mb-4 p-4 border border-gray-300 rounded-lg shadow-md">
                     <div class="text-right col-span-2">

@@ -27,11 +27,10 @@ class GuruController
             $password = $_POST['password'];
             $jenisKelamin = $_POST['jenisKelamin'];
             $tempatTglLahir = $_POST['tempatTglLahir'];
-            $kelas = $_POST['kelas'];
             $alamat = $_POST['alamat'];
             $noTelp = $_POST['noTelp'];
 
-            $this->guruModel->addGuru($username, $password, 2, $jenisKelamin, $tempatTglLahir, $kelas, $alamat, $noTelp);
+            $this->guruModel->addGuru($username, $password, 2, $jenisKelamin, $tempatTglLahir, $alamat, $noTelp);
 
             echo "<script>
                     alert('Guru berhasil ditambahkan!');
@@ -61,24 +60,25 @@ class GuruController
             $password = $_POST['password'];
             $jenisKelamin = $_POST['jenisKelamin'];
             $tempatTglLahir = $_POST['tempatTglLahir'];
-            $kelas = $_POST['kelas'];
             $alamat = $_POST['alamat'];
             $noTelp = $_POST['noTelp'];
 
-            $this->guruModel->updateGuru($guruId, $username, $password, $jenisKelamin, $tempatTglLahir, $kelas, $alamat, $noTelp);
+            // Perbarui data guru
+            $this->guruModel->updateGuru($guruId, $username, $password, 2, $jenisKelamin, $tempatTglLahir, $alamat, $noTelp);
 
             echo "<script>
-                    alert('Guru berhasil diperbarui!');
-                    window.location.href = 'index.php?modul=guru&fitur=list';
-                  </script>";
+                alert('Guru berhasil diperbarui!');
+                window.location.href = 'index.php?modul=guru&fitur=list';
+              </script>";
         } catch (Exception $e) {
             echo "<script>
-                    alert('Gagal memperbarui data Guru. Silakan coba lagi.');
-                    window.location.href = 'index.php?modul=guru&fitur=edit&guruId={$guruId}'; 
-                  </script>";
+                alert('Gagal memperbarui data Guru. Silakan coba lagi.');
+                window.location.href = 'index.php?modul=guru&fitur=edit&guruId={$guruId}';
+              </script>";
         }
         exit;
     }
+
 
     public function deleteGurus()
     {

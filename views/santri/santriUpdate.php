@@ -24,7 +24,7 @@
             <div class="max-w-lg mx-auto bg-gradient-to-br from-white to-gray-100 p-8 rounded-2xl shadow-xl transform hover:shadow-2xl transition-all duration-300">
                 <h2 class="text-xl font-bold mb-6 text-gray-800 text-center" style="font-family: 'Poppins', sans-serif;">Update Data Santri</h2>
                 <form action="index.php?modul=santri&fitur=update" method="POST" class="space-y-6">
-                    <input type="hidden" id="santriId" name="santriId" value="<?php echo htmlspecialchars($objSantri['santriId']); ?>">
+                    <input type="hidden" id="santriId" name="santriId" value="<?php echo htmlspecialchars($objSantri['id']); ?>">
 
                     <!-- Username -->
                     <div>
@@ -83,6 +83,19 @@
                         <input type="text" id="santriGajiOrtu" name="santriGajiOrtu" class="shadow border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:shadow-md"
                             placeholder="Masukkan Gaji Orang Tua" required value="<?php echo isset($objSantri['santriGajiOrtu']) ? htmlspecialchars($objSantri['santriGajiOrtu']) : ''; ?>">
                     </div>
+                    <!-- Kelas -->
+                    <div>
+                        <label for="idKelas" class="block text-gray-600 text-sm font-semibold mb-2">Kelas</label>
+                        <select id="idKelas" name="idKelas" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" required>
+                            
+                            <?php foreach ($kelas as $kelasItem): ?>
+                                <option value="<?= $kelasItem['id']; ?>" <?= (isset($santri['idKelas']) && $santri['idKelas'] == $kelasItem['id']) ? 'selected' : ''; ?>>
+                                    <?= $kelasItem['namaKelas']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
 
                     <!-- Submit Button -->
                     <div class="flex justify-center">

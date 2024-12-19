@@ -24,7 +24,7 @@
                 <h2 class="text-xl font-bold mb-6 text-gray-800 text-center" style="font-family: 'Poppins', sans-serif;">Update Data Guru</h2>
                 <form action="index.php?modul=guru&fitur=update" method="POST" class="space-y-6">
                     <!-- Hidden input untuk ID Guru -->
-                    <input type="hidden" id="guruId" name="guruId" value="<?php echo htmlspecialchars($objGuru['guruId']); ?>">
+                    <input type="hidden" id="guruId" name="guruId" value="<?php echo htmlspecialchars($objGuru['id']); ?>">
 
                     <!-- Username -->
                     <div>
@@ -56,13 +56,6 @@
                             placeholder="Masukkan Tempat dan Tanggal Lahir" required value="<?php echo isset($objGuru['guruTempatTglLahir']) ? htmlspecialchars($objGuru['guruTempatTglLahir']) : ''; ?>">
                     </div>
 
-                    <!-- Kelas -->
-                    <div>
-                        <label for="kelas" class="block text-gray-600 text-sm font-semibold mb-2">Kelas:</label>
-                        <input type="text" id="kelas" name="kelas" class="shadow border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:shadow-md"
-                            placeholder="Masukkan Kelas" required value="<?php echo isset($objGuru['guruKelas']) ? htmlspecialchars($objGuru['guruKelas']) : ''; ?>">
-                    </div>
-
                     <!-- Alamat -->
                     <div>
                         <label for="alamat" class="block text-gray-600 text-sm font-semibold mb-2">Alamat:</label>
@@ -76,7 +69,7 @@
                         <input type="tel" id="noTelp" name="noTelp" class="shadow border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:shadow-md"
                             placeholder="Masukkan No. Telepon" required value="<?php echo isset($objGuru['guruNoTelp']) ? htmlspecialchars($objGuru['guruNoTelp']) : ''; ?>">
                     </div>
-
+                
                     <!-- Submit Button -->
                     <div class="flex justify-center">
                         <button type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-600 hover:to-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-2xl transform hover:scale-105">

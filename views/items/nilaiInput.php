@@ -23,7 +23,7 @@
 
                         <select name="santriId" id="santriId" class="w-full p-2 border border-gray-300 rounded mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <?php foreach ($santris as $santri) { ?>
-                                <option value="<?php echo htmlspecialchars($santri['santriId']); ?>">
+                                <option value="<?php echo htmlspecialchars($santri['id']); ?>">
                                     <?php echo htmlspecialchars($santri['username']); ?>
                                 </option>
                             <?php } ?>
@@ -36,18 +36,19 @@
                     <p id="usernameDisplay" class="mt-4 text-gray-800"></p> <!-- Menampilkan username yang dipilih -->
 
                     <div id="nilai-inputs">
-                        <?php foreach ($mapels as $mapel) { ?>
+                        <?php foreach ($hasil as $mapel) { ?>
                             <div class="mb-4 flex items-center justify-between">
                                 <span class="text-gray-800 text-lg font-medium"><?php echo htmlspecialchars($mapel->mapelNama); ?></span>
                                 <input type="hidden" name="mapelId[]" value="<?php echo htmlspecialchars($mapel->mapelId); ?>">
 
                                 <?php
-                                $nilaiValue = 0; 
-                                if ($objNilai) {
+                                $nilaiValue = 0; // Nilai default
+                                if ($objNilai && isset($objNilai->detailNilai)) {
+                                    // Loop melalui detailNilai untuk mencari nilai yang sesuai dengan mapelId
                                     foreach ($objNilai->detailNilai as $detail) {
                                         if ($detail->mapel->mapelId == $mapel->mapelId) {
-                                            $nilaiValue = $detail->nilai;
-                                            break;
+                                            $nilaiValue = $detail->nilai; // Set nilai jika ditemukan
+                                            break; // Keluar dari loop jika nilai ditemukan
                                         }
                                     }
                                 }
@@ -56,7 +57,8 @@
                                 <input type="number" name="nilai[]" class="w-1/3 p-2 border border-gray-300 rounded mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500" value="<?php echo $nilaiValue; ?>" required>
                             </div>
                         <?php } ?>
-                       
+
+
                     </div>
 
 

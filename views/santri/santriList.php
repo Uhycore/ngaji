@@ -43,6 +43,7 @@
                                 <th class="py-3 px-6 uppercase font-medium text-sm text-center border-r">Nama Ortu</th>
                                 <th class="py-3 px-6 uppercase font-medium text-sm text-center border-r">No Telp Ortu</th>
                                 <th class="py-3 px-6 uppercase font-medium text-sm text-center border-r">Gaji Ortu</th>
+                                <th class="py-3 px-6 uppercase font-medium text-sm text-center border-r">Kelas</th>
                                 <th class="py-3 px-2 uppercase font-medium text-sm text-center">Actions</th>
                             </tr>
                         </thead>
@@ -50,7 +51,7 @@
                             <?php if (!empty($santris)) {
                                 foreach ($santris as $index => $santri) { ?>
                                     <tr class="border-t border-b transition-all duration-300 ease-in-out <?php echo $index % 2 == 1 ? 'bg-gray-200' : ''; ?>">
-                                        <td class="py-4 px-2 text-center font-bold text-black-500"><?php echo htmlspecialchars($santri['santriId']); ?></td>
+                                        <td class="py-4 px-2 text-center font-bold text-black-500"><?php echo htmlspecialchars($santri['id']); ?></td>
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['username']); ?></td>
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['password']); ?></td>
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['santriJenisKelamin']); ?></td>
@@ -59,14 +60,15 @@
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['santriNamaOrtu']); ?></td>
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['santriNoTelpOrtu']); ?></td>
                                         <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['santriGajiOrtu']); ?></td>
+                                        <td class="py-4 px-6 text-center border border-gray-300"><?php echo htmlspecialchars($santri['idKelas']['namaKelas']); ?></td>
                                         <td class="py-4 px-6 flex justify-center space-x-2 border-gray-300">
-                                            <form action="index.php?modul=santri&fitur=edit&santriId=<?= $santri['santriId'] ?>" method="POST" class="inline">
+                                            <form action="index.php?modul=santri&fitur=edit&santriId=<?= $santri['id'] ?>" method="POST" class="inline">
                                                 <button type="submit" class="bg-transparent hover:bg-gray-200 p-1 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-110">
                                                     <i class="fas fa-edit text-green-500 hover:text-green-700 w-4 h-4"></i>
                                                 </button>
                                             </form>
                                             <form action="index.php?modul=santri&fitur=delete" method="POST" class="inline">
-                                                <input type="hidden" name="santriId" value="<?php echo $santri['santriId']; ?>">
+                                                <input type="hidden" name="santriId" value="<?php echo $santri['id']; ?>">
                                                 <button type="submit" class="bg-transparent hover:bg-gray-200 p-1 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-110">
                                                     <i class="fas fa-trash-alt text-red-500 hover:text-red-700 w-4 h-4"></i>
                                                 </button>

@@ -1,10 +1,12 @@
 <?php
 require_once 'roleModel.php';
+require_once 'kelasModel.php';
 
 class SantriModel
 {
     private $mysqli;
     private $roleModel;
+    private $kelasModel;
 
     public function __construct()
     {
@@ -15,6 +17,8 @@ class SantriModel
         }
 
         $this->roleModel = new RoleModel();
+        $this->kelasModel = new KelasModel();
+
         $result = $this->mysqli->query("SELECT COUNT(*) FROM santris");
         $count = $result->fetch_row()[0];
 
@@ -25,17 +29,19 @@ class SantriModel
 
     public function initializeDefaultSantri()
     {
-        $this->addSantri('Arilsantri', '1', 3, 'Laki-laki', 'Jakarta, 2000-01-01', 'Jl. Raya Jakarta', 'Aril', '0123456789', 1000000);
-        $this->addSantri('Mubinsantri', '1', 3, 'Laki-laki', 'Jakarta, 2001-02-02', 'Jl. Raya Jakarta', 'Mubin', '0123456789', 1200000);
+        $this->addSantri('Arilsantri', '1', 3, 'Laki-laki', 'Jakarta, 2000-01-01', 'Jl. Raya Jakarta', 'Aril', '0123456789', 1000000, 1);  // Add idKelas value here
+        $this->addSantri('Mubinsantri', '1', 3, 'Laki-laki', 'Jakarta, 2001-02-02', 'Jl. Raya Jakarta', 'Mubin', '0123456789', 1200000, 2);  // Add idKelas value here
     }
 
-    public function addSantri($username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
+
+    public function addSantri($username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas)
     {
-        $stmt = $this->mysqli->prepare("INSERT INTO santris (username, password, roleId, santriJenisKelamin, santriTempatTglLahir, santriAlamat, santriNamaOrtu, santriNoTelpOrtu, santriGajiOrtu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssisssssi", $username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
+        $stmt = $this->mysqli->prepare("INSERT INTO santris (username, password, roleId, santriJenisKelamin, santriTempatTglLahir, santriAlamat, santriNamaOrtu, santriNoTelpOrtu, santriGajiOrtu, idKelas) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssissssssi", $username, $password, $roleId, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas);
         $stmt->execute();
         $stmt->close();
     }
+
 
     public function getAllSantri()
     {
@@ -44,8 +50,9 @@ class SantriModel
 
         while ($row = $result->fetch_assoc()) {
             $role = $this->roleModel->getRoleById(3);
+            $kelas = $this->kelasModel->getKelasById($row['idKelas']);
             $santris[] = [
-                'santriId' => $row['santriId'],
+                'id' => $row['id'],
                 'username' => $row['username'],
                 'password' => $row['password'],
                 'roleId' => $role,
@@ -54,17 +61,19 @@ class SantriModel
                 'santriAlamat' => $row['santriAlamat'],
                 'santriNamaOrtu' => $row['santriNamaOrtu'],
                 'santriNoTelpOrtu' => $row['santriNoTelpOrtu'],
-                'santriGajiOrtu' => $row['santriGajiOrtu']
+                'santriGajiOrtu' => $row['santriGajiOrtu'],
+                'idKelas' => $kelas
+
             ];
         }
 
         return $santris;
     }
 
-    public function getSantriById($santriId)
+    public function getSantriById($id)
     {
-        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE santriId = ?");
-        $stmt->bind_param("i", $santriId);
+        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE id = ?");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         $santri = $result->fetch_assoc();
@@ -72,9 +81,10 @@ class SantriModel
 
         if ($santri) {
             $role = $this->roleModel->getRoleById(3);
+            $kelas = $this->kelasModel->getKelasById($santri['idKelas']);
 
             return [
-                'santriId' => $santri['santriId'],
+                'id' => $santri['id'],
                 'username' => $santri['username'],
                 'password' => $santri['password'],
                 'roleId' => $role,
@@ -83,7 +93,8 @@ class SantriModel
                 'santriAlamat' => $santri['santriAlamat'],
                 'santriNamaOrtu' => $santri['santriNamaOrtu'],
                 'santriNoTelpOrtu' => $santri['santriNoTelpOrtu'],
-                'santriGajiOrtu' => $santri['santriGajiOrtu']
+                'santriGajiOrtu' => $santri['santriGajiOrtu'],
+                'idKelas' => $kelas
             ];
         }
 
@@ -103,18 +114,19 @@ class SantriModel
         return $santri;
     }
 
-    public function updateSantri($santriId, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu)
+    public function updateSantri($id, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas)
     {
-        $stmt = $this->mysqli->prepare("UPDATE santris SET username = ?, password = ?, santriJenisKelamin = ?, santriTempatTglLahir = ?, santriAlamat = ?, santriNamaOrtu = ?, santriNoTelpOrtu = ?, santriGajiOrtu = ? WHERE santriId = ?");
-        $stmt->bind_param("sssssssii", $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $santriId);
+        $stmt = $this->mysqli->prepare("UPDATE santris SET username = ?, password = ?, santriJenisKelamin = ?, santriTempatTglLahir = ?, santriAlamat = ?, santriNamaOrtu = ?, santriNoTelpOrtu = ?, santriGajiOrtu = ?, idKelas = ? WHERE id = ?");
+        $stmt->bind_param("sssssssiis", $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas, $id);
         $stmt->execute();
         $stmt->close();
     }
 
-    public function deleteSantri($santriId)
+
+    public function deleteSantri($id)
     {
-        $stmt = $this->mysqli->prepare("DELETE FROM santris WHERE santriId = ?");
-        $stmt->bind_param("i", $santriId);
+        $stmt = $this->mysqli->prepare("DELETE FROM santris WHERE id = ?");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
     }

@@ -5,6 +5,7 @@ require_once 'controllers/santriController.php';
 require_once 'controllers/guruController.php';
 require_once 'controllers/bendaharaController.php';
 require_once 'controllers/mapelController.php';
+require_once 'controllers/kelasController.php';
 require_once 'controllers/nilaiController.php';
 require_once 'controllers/keuanganController.php';
 
@@ -27,6 +28,7 @@ $objAdmin = new AdminController();
 $objGuru = new GuruController();
 $objBendahara = new BendaharaController();
 $objMapel = new MapelController();
+$objKelas = new KelasController();
 $objNilai = new NilaiController();
 $objKeuangan = new KeuanganController();
 
@@ -107,7 +109,7 @@ switch ($modul) {
                 $objSantri->listSantri();
                 break;
             case 'input':
-                include 'views/santri/santriInput.php';
+                $objSantri->inputSantri();
                 break;
             case 'add':
                 $objSantri->addSantri();
@@ -205,7 +207,32 @@ switch ($modul) {
                 break;
         }
         break;
-    
+
+    case 'kelas':
+
+        $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
+
+        switch ($fitur) {
+            case 'list':
+                $objKelas->listKelas();
+                break;    
+            case 'input':
+                $objKelas->inputKelas();
+                break;
+            case 'add':
+                $objKelas->addKelas();
+                break;
+            case 'edit':
+                $objKelas->editKelas();
+                break;
+            case 'update':
+                $objKelas->updateKelas();
+                break;
+            case 'delete':
+                $objKelas->deleteKelas();
+                break;
+        }
+        break;
     case 'nilai':
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
 
@@ -250,11 +277,11 @@ switch ($modul) {
                 include 'views/santri/santriProfilAsSantri.php';
                 break;
             case 'nilai':
-                $nilai = $nilai->getNilaiById($santri['santriId']);
+                $nilai = $nilai->getNilaiBySantriId($santri['id']);
                 include 'views/santri/santriNilaiAsSantri.php';
                 break;
             case 'keuangan':
-                $keuangan = $keuangan->getKeuanganById($santri['santriId']);
+                $keuangan = $keuangan->getKeuanganById($santri['id']);
                 include 'views/santri/santriKeuanganAsSantri.php';
                 break;
             default:

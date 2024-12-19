@@ -145,23 +145,23 @@ echo "</pre>";
                     <p class="mt-2 text-sm font-medium text-gray-500">Add Mapel</p>
                 </div>
             </a>
-            <!-- Rombel List -->
-            <a href="index.php?modul=rombonganBelajar&fitur=list">
+            <!-- Kelas List -->
+            <a href="index.php?modul=kelas&fitur=list">
                 <div class="flex flex-col items-center justify-center">
                     <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
-                        <i class="fas fa-book"></i>
+                        <i class="fas fa-list"></i>
                     </div>
-                    <p class="mt-2 text-sm font-medium text-gray-500">List Rombel</p>
+                    <p class="mt-2 text-sm font-medium text-gray-500">List Kelas</p>
                 </div>
             </a>
 
-            <!-- Rombel Add -->
-            <a href="index.php?modul=rombonganBelajar&fitur=input">
+            <!-- Kelas Add -->
+            <a href="index.php?modul=kelas&fitur=input">
                 <div class="flex flex-col items-center justify-center">
                     <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
-                        <i class="fas fa-book-medical"></i>
+                        <i class="fas fa-school"></i>
                     </div>
-                    <p class="mt-2 text-sm font-medium text-gray-500">Add Rombel</p>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Add Kelas</p>
                 </div>
             </a>
 

@@ -1,13 +1,16 @@
 <?php
 require_once 'models/santriModel.php';
+require_once 'models/kelasModel.php';
 
 class SantriController
 {
     private $santriModel;
+    private $kelasModel;
 
     public function __construct()
     {
         $this->santriModel = new SantriModel();
+        $this->kelasModel = new KelasModel();
     }
 
     public function listSantri()
@@ -15,6 +18,15 @@ class SantriController
         try {
             $santris = $this->santriModel->getAllSantri();
             include 'views/santri/santriList.php';
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    public function inputSantri(){
+        try {
+            $kelas = $this->kelasModel->getAllKelas();
+            include 'views/santri/santriInput.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -31,8 +43,10 @@ class SantriController
             $santriNamaOrtu = $_POST['santriNamaOrtu'];
             $santriNoTelpOrtu = $_POST['santriNoTelpOrtu'];
             $santriGajiOrtu = $_POST['santriGajiOrtu'];
+            $idKelas = $_POST['idKelas']; // Get the idKelas from POST data
 
-            $this->santriModel->addSantri($username, $password, 3, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
+            // Adding the new Santri along with the idKelas
+            $this->santriModel->addSantri($username, $password, 3, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas);
 
             echo "<script>
                     alert('Santri berhasil ditambahkan!');
@@ -52,6 +66,7 @@ class SantriController
         try {
             $santriId = $_GET['santriId'];
             $objSantri = $this->santriModel->getSantriById($santriId);
+            $kelas = $this->kelasModel->getAllKelas();
             include 'views/santri/santriUpdate.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
@@ -70,8 +85,10 @@ class SantriController
             $santriNamaOrtu = $_POST['santriNamaOrtu'];
             $santriNoTelpOrtu = $_POST['santriNoTelpOrtu'];
             $santriGajiOrtu = $_POST['santriGajiOrtu'];
+            $idKelas = $_POST['idKelas']; // Get idKelas for update
 
-            $this->santriModel->updateSantri($santriId, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu);
+            // Updating Santri data including idKelas
+            $this->santriModel->updateSantri($santriId, $username, $password, $santriJenisKelamin, $santriTempatTglLahir, $santriAlamat, $santriNamaOrtu, $santriNoTelpOrtu, $santriGajiOrtu, $idKelas);
 
             echo "<script>
                     alert('Santri berhasil diperbarui!');

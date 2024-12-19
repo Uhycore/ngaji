@@ -51,11 +51,6 @@
                         <input type="text" id="tempatTglLahir" name="tempatTglLahir" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" placeholder="Masukkan Tempat dan Tanggal Lahir" required>
                     </div>
 
-                    <!-- Kelas -->
-                    <div>
-                        <label for="kelas" class="block text-gray-600 text-sm font-semibold mb-2">Kelas</label>
-                        <input type="text" id="kelas" name="kelas" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" placeholder="Masukkan Kelas" required>
-                    </div>
 
                     <!-- Alamat -->
                     <div>

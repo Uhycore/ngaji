@@ -27,14 +27,14 @@ class GuruModel
 
     public function initializeDefaultGuru()
     {
-        $this->addGuru('Arilguru', '1', 2, 'Laki-laki', 'Jakarta/1 Jan 1990', 'Kelas 1', 'Jl. Raya Jakarta', '0123456789');
-        $this->addGuru('Mubinguru', '1', 2, 'Laki-laki', 'Jakarta/1 Jan 1990', 'Kelas 2', 'Jl. Raya Jakarta', '0123456789');
+        $this->addGuru('Arilguru', '1', 2, 'Laki-laki', 'Jakarta/1 Jan 1990',  'Jl. Raya Jakarta', '0123456789');
+        $this->addGuru('Mubinguru', '1', 2, 'Laki-laki', 'Jakarta/1 Jan 1990', 'Jl. Raya Jakarta', '0123456789');
     }
 
-    public function addGuru($username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruKelas, $guruAlamat, $guruNoTelp)
+    public function addGuru($username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruAlamat, $guruNoTelp)
     {
-        $stmt = $this->mysqli->prepare("INSERT INTO gurus (username, password, roleId, guruJenisKelamin, guruTempatTglLahir, guruKelas, guruAlamat, guruNoTelp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssisssss", $username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruKelas, $guruAlamat, $guruNoTelp);
+        $stmt = $this->mysqli->prepare("INSERT INTO gurus (username, password, roleId, guruJenisKelamin, guruTempatTglLahir, guruAlamat, guruNoTelp) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssisssi", $username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruAlamat, $guruNoTelp);
         $stmt->execute();
         $stmt->close();
     }
@@ -47,13 +47,12 @@ class GuruModel
         while ($row = $result->fetch_assoc()) {
             $role = $this->roleModel->getRoleById(2);  // Mendapatkan role dengan ID 2 (Guru)
             $gurus[] = [
-                'guruId' => $row['guruId'],
+                'id' => $row['id'],
                 'username' => $row['username'],
                 'password' => $row['password'],
                 'roleId' => $role,
                 'guruJenisKelamin' => $row['guruJenisKelamin'],
                 'guruTempatTglLahir' => $row['guruTempatTglLahir'],
-                'guruKelas' => $row['guruKelas'],
                 'guruAlamat' => $row['guruAlamat'],
                 'guruNoTelp' => $row['guruNoTelp']
             ];
@@ -62,10 +61,10 @@ class GuruModel
         return $gurus;
     }
 
-    public function getGuruById($guruId)
+    public function getGuruById($id)
     {
-        $stmt = $this->mysqli->prepare("SELECT * FROM gurus WHERE guruId = ?");
-        $stmt->bind_param("i", $guruId);
+        $stmt = $this->mysqli->prepare("SELECT * FROM gurus WHERE id = ?");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
@@ -74,13 +73,13 @@ class GuruModel
         if ($row) {
             $role = $this->roleModel->getRoleById(2);  // Mendapatkan role dengan ID 2 (Guru)
             return [
-                'guruId' => $row['guruId'],
+                'id' => $row['id'],
                 'username' => $row['username'],
                 'password' => $row['password'],
                 'roleId' => $role,
                 'guruJenisKelamin' => $row['guruJenisKelamin'],
                 'guruTempatTglLahir' => $row['guruTempatTglLahir'],
-                'guruKelas' => $row['guruKelas'],
+
                 'guruAlamat' => $row['guruAlamat'],
                 'guruNoTelp' => $row['guruNoTelp']
             ];
@@ -101,18 +100,27 @@ class GuruModel
         return $guru;
     }
 
-    public function updateGuru($guruId, $username, $password, $guruJenisKelamin, $guruTempatTglLahir, $guruKelas, $guruAlamat, $guruNoTelp)
+    public function updateGuru($id, $username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruAlamat, $guruNoTelp)
     {
-        $stmt = $this->mysqli->prepare("UPDATE gurus SET username = ?, password = ?, guruJenisKelamin = ?, guruTempatTglLahir = ?, guruKelas = ?, guruAlamat = ?, guruNoTelp = ? WHERE guruId = ?");
-        $stmt->bind_param("sssssssi", $username, $password, $guruJenisKelamin, $guruTempatTglLahir, $guruKelas, $guruAlamat, $guruNoTelp, $guruId);
+        // Memperbarui query tanpa idKelas
+        $stmt = $this->mysqli->prepare("UPDATE gurus SET username = ?, password = ?, roleId = ?, guruJenisKelamin = ?, guruTempatTglLahir = ?, guruAlamat = ?, guruNoTelp = ? WHERE id = ?");
+
+        // Binding parameter dengan jumlah yang sesuai
+        $stmt->bind_param("ssisssii", $username, $password, $roleId, $guruJenisKelamin, $guruTempatTglLahir, $guruAlamat, $guruNoTelp, $id);
+
+        // Eksekusi query
         $stmt->execute();
+
+        // Menutup statement setelah eksekusi
         $stmt->close();
     }
 
-    public function deleteGuru($guruId)
+
+
+    public function deleteGuru($id)
     {
-        $stmt = $this->mysqli->prepare("DELETE FROM gurus WHERE guruId = ?");
-        $stmt->bind_param("i", $guruId);
+        $stmt = $this->mysqli->prepare("DELETE FROM gurus WHERE id = ?");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
     }

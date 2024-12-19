@@ -75,6 +75,17 @@
                         <input type="number" id="santriGajiOrtu" name="santriGajiOrtu" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" placeholder="Masukkan Gaji Orang Tua" required>
                     </div>
 
+                    <!-- Kelas -->
+                    <div>
+                        <label for="idKelas" class="block text-gray-600 text-sm font-semibold mb-2">Kelas</label>
+                        <select id="idKelas" name="idKelas" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" required>
+                            <option value="" disabled selected>Pilih Kelas</option>
+                            <?php foreach ($kelas as $kelasItem): ?>
+                                <option value="<?= $kelasItem['id']; ?>"><?= $kelasItem['namaKelas']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
                     <!-- Submit Button -->
                     <div class="flex justify-center mt-6">
                         <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300 shadow-lg hover:shadow-2xl transform hover:scale-105">

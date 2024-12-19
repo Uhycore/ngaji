@@ -3,18 +3,21 @@
 require_once 'models/nilaiModel.php';
 require_once 'models/santriModel.php';
 require_once 'models/mapelModel.php';
+require_once 'models/kelasModel.php';
 
 class NilaiController
 {
     public $nilaiModel;
     protected $santriModel;
     protected $mapelModel;
+    private $kelasModel;
 
     public function __construct()
     {
         $this->nilaiModel = new NilaiModel();
         $this->santriModel = new SantriModel();
         $this->mapelModel = new MapelModel();
+        $this->kelasModel = new KelasModel();
     }
 
     public function listNilais()
@@ -32,23 +35,36 @@ class NilaiController
 
     public function inputNilais()
     {
-
         $objNilai = null;
+        $hasil = [];
+        $santris = $this->santriModel->getAllSantri();
 
         if (isset($_GET['santriId'])) {
             $santriId = $_GET['santriId'];
 
             $objNilai = $this->nilaiModel->getNilaiBySantriId($santriId);
+            $santri = $this->santriModel->getSantriById($santriId);
+
+            $objMapels = $this->mapelModel->getAllmapel();
+
+            foreach ($objMapels as $mapel) {
+                if ($mapel->kelasId['id'] == $santri['idKelas']['id']) { 
+                    $hasil[] = $mapel;
+                }
+            }
+        } else {
+            $hasil = $this->mapelModel->getAllmapel();
+            include 'views/items/nilaiInput.php';
+            exit;
         }
 
-        $santris = $this->santriModel->getAllSantri();
-        $mapels = $this->mapelModel->getAllmapel();
         include 'views/items/nilaiInput.php';
-
-
 
         exit;
     }
+
+
+
 
     public function addNilais()
     {

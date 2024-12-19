@@ -36,7 +36,7 @@ class loginController
             header("Location: index.php?modul=null");
             exit();
         } elseif ($santri && $santri['password'] == $password && $santri['roleId'] == 3) {
-            $objSantri = $this->santriModel->getSantriById($santri['santriId']);
+            $objSantri = $this->santriModel->getSantriById($santri['id']);
            
             $_SESSION['username_login'] = $objSantri;
             header("Location: index.php?modul=null");

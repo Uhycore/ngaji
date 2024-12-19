@@ -1,12 +1,17 @@
 <?php
-require_once 'models/adminModel.php'; // Pastikan path ke adminModel.php sesuai
-// Pastikan path ke roleModel.php sesuai
+require_once 'models/kelasModel.php';
 
-// Buat instance AdminModel
-$adminModel = new AdminModel();
+$data = new KelasModel;
 
-$a = $adminModel->getAllAdmins();
+$a = $data->getAllKelas();
 
 echo "<pre>";
 print_r($a);
+echo "</pre>";
+
+
+$b = $data->getKelasById(101);
+
+echo "<pre>";
+print_r($b);
 echo "</pre>";

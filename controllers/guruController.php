@@ -1,7 +1,8 @@
 <?php
+require_once 'interface.php';
 require_once 'models/guruModel.php';
 
-class GuruController
+class GuruController implements userControllerInterface
 {
     private $guruModel;
 
@@ -10,7 +11,7 @@ class GuruController
         $this->guruModel = new GuruModel();
     }
 
-    public function listGurus()
+    public function listUsers()
     {
         try {
             $gurus = $this->guruModel->getAllGurus();
@@ -20,7 +21,7 @@ class GuruController
         }
     }
 
-    public function addGurus()
+    public function addUser()
     {
         try {
             $username = $_POST['username'];
@@ -52,7 +53,7 @@ class GuruController
         include 'views/guru/guruUpdate.php';
     }
 
-    public function updateGurus()
+    public function updateUser()
     {
         try {
             $guruId = $_POST['guruId'];
@@ -63,7 +64,6 @@ class GuruController
             $alamat = $_POST['alamat'];
             $noTelp = $_POST['noTelp'];
 
-            // Perbarui data guru
             $this->guruModel->updateGuru($guruId, $username, $password, 2, $jenisKelamin, $tempatTglLahir, $alamat, $noTelp);
 
             echo "<script>
@@ -80,7 +80,7 @@ class GuruController
     }
 
 
-    public function deleteGurus()
+    public function deleteUser()
     {
         try {
             $guruId = $_POST['guruId'];

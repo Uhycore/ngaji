@@ -8,7 +8,6 @@ class MapelModel
 
     public function __construct()
     {
-        // Menghubungkan ke database MySQL
         $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
 
         if ($this->mysqli->connect_error) {
@@ -17,7 +16,6 @@ class MapelModel
 
         $this->kelasModel = new KelasModel();
 
-        // Mengecek apakah tabel mapels kosong dan menginisialisasi data default jika perlu
         $result = $this->mysqli->query("SELECT COUNT(*) FROM mapels");
         $count = $result->fetch_row()[0];
 
@@ -26,7 +24,6 @@ class MapelModel
         }
     }
 
-    // Menambahkan mapel default jika tabel kosong
     public function initializeDefaultMapel()
     {
         $this->addMapel('turutan', 'Turutan', 1);
@@ -38,7 +35,6 @@ class MapelModel
         $this->addMapel('Sejarah', 'Sejarah', 7);
     }
 
-    // Menambahkan mapel baru ke database
     public function addMapel($mapelNama, $mapelDeskripsi, $kelasId)
     {
         $stmt = $this->mysqli->prepare("INSERT INTO mapels (mapelNama, mapelDeskripsi, kelasId) VALUES (?, ?, ?)");
@@ -47,28 +43,25 @@ class MapelModel
         $stmt->close();
     }
 
-    // Mendapatkan semua mapel
     public function getAllMapel()
     {
         $result = $this->mysqli->query("SELECT * FROM mapels");
         $mapels = [];
 
         while ($row = $result->fetch_assoc()) {
-            // Mengambil data Kelas berdasarkan kelasId
             $kelas = $this->kelasModel->getKelasById($row['kelasId']);
 
             $mapels[] = new Mapel(
                 $row['id'],
                 $row['mapelNama'],
                 $row['mapelDeskripsi'],
-                $kelas // Menambahkan objek Kelas ke Mapel
+                $kelas
             );
         }
 
         return $mapels;
     }
 
-    // Mendapatkan mapel berdasarkan ID
     public function getMapelById($id)
     {
         $stmt = $this->mysqli->prepare("SELECT * FROM mapels WHERE id = ?");
@@ -79,24 +72,19 @@ class MapelModel
         $stmt->close();
 
         if ($mapel) {
-            // Mengambil Kelas berdasarkan kelasId
             $kelas = $this->kelasModel->getKelasById($mapel['kelasId']);
 
             return new Mapel(
                 $mapel['id'],
                 $mapel['mapelNama'],
                 $mapel['mapelDeskripsi'],
-                $kelas // Menambahkan objek Kelas ke Mapel
+                $kelas
             );
         }
 
         return null;
     }
 
-    // Mendapatkan Kelas berdasarkan kelasId
-
-
-    // Update mapel
     public function updateMapel($id, $mapelNama, $mapelDeskripsi, $kelasId)
     {
         $stmt = $this->mysqli->prepare("UPDATE mapels SET mapelNama = ?, mapelDeskripsi = ?, kelasId = ? WHERE id = ?");
@@ -105,10 +93,9 @@ class MapelModel
         $stmt->close();
     }
 
-    // Menghapus mapel
     public function deleteMapel($id)
     {
-        $stmt = $this->mysqli->prepare("DELETE FROM detail_nilai WHERE id = ?");
+        $stmt = $this->mysqli->prepare("DELETE FROM detail_nilai WHERE mapelId = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
@@ -119,7 +106,7 @@ class MapelModel
         $stmt->close();
     }
 
-    // Mendapatkan mapel berdasarkan nama
+
     public function getMapelByNama($mapelNama)
     {
         $stmt = $this->mysqli->prepare("SELECT * FROM mapels WHERE mapelNama = ?");
@@ -130,14 +117,13 @@ class MapelModel
         $stmt->close();
 
         if ($mapel) {
-            // Mengambil Kelas berdasarkan kelasId
             $kelas = $this->kelasModel->getKelasById($mapel['kelasId']);
 
             return new Mapel(
                 $mapel['id'],
                 $mapel['mapelNama'],
                 $mapel['mapelDeskripsi'],
-                $kelas // Menambahkan objek Kelas ke Mapel
+                $kelas
             );
         }
 

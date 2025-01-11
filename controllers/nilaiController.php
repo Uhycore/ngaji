@@ -23,7 +23,25 @@ class NilaiController
     public function listNilais()
     {
         try {
-            $nilaiNodes = $this->nilaiModel->getAllNilai();
+            $guru = $_SESSION['username_login'];
+
+
+            $kelas = $this->kelasModel->getKelasByGuruId($guru['id']);
+
+
+            $santri = $this->santriModel->getSantriByKelasId($kelas['id']);
+
+
+            foreach ($santri as $santriItem) {
+                $nilai = $this->nilaiModel->getNilaiBySantriId($santriItem['id']);
+                if ($nilai) {
+
+                    $nilaiNodes[] = $nilai;
+                }
+            }
+
+
+
 
             include 'views/items/nilaiList.php';
         } catch (Exception $e) {
@@ -35,20 +53,26 @@ class NilaiController
 
     public function inputNilais()
     {
+        $guru = $_SESSION['username_login'];
+        $kelas = $this->kelasModel->getKelasByGuruId($guru['id']);
         $objNilai = null;
         $hasil = [];
-        $santris = $this->santriModel->getAllSantri();
+        $santris = $this->santriModel->getSantriByKelasId($kelas['id']);
 
         if (isset($_GET['santriId'])) {
             $santriId = $_GET['santriId'];
 
             $objNilai = $this->nilaiModel->getNilaiBySantriId($santriId);
+            foreach ($objNilai as $nilai) {
+                $objNilai = $nilai;
+            }
+
             $santri = $this->santriModel->getSantriById($santriId);
 
             $objMapels = $this->mapelModel->getAllmapel();
 
             foreach ($objMapels as $mapel) {
-                if ($mapel->kelasId['id'] == $santri['idKelas']['id']) { 
+                if ($mapel->kelasId['id'] == $santri['idKelas']['id']) {
                     $hasil[] = $mapel;
                 }
             }
@@ -80,11 +104,12 @@ class NilaiController
                 $mapel = $this->mapelModel->getMapelById($mapel_id);
 
                 if ($mapel) {
+                   
                     $detailNilaiNode = new DetailNilaiNode($counter++, $mapel, $nilais[$key]);
                     $detail_nilai_data[] = $detailNilaiNode;
                 }
             }
-
+            
             // Menambahkan atau memperbarui data nilai
             if (!empty($detail_nilai_data)) {
                 $this->nilaiModel->addNilai($santriId, $detail_nilai_data);

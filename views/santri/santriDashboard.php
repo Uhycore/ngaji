@@ -1,8 +1,4 @@
-<?php
-echo "<pre>";
-print_r($_SESSION['username_login']);
-echo "</pre>";
-?>
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -24,8 +20,6 @@ echo "</pre>";
         <!-- Logo Lingkaran -->
         <div class="grid grid-cols-3 gap-4 mb-8">
 
-
-
             <!-- Santri Nilai -->
             <a href="index.php?modul=asSantri&fitur=nilai">
                 <div class="flex flex-col items-center justify-center">
@@ -33,6 +27,15 @@ echo "</pre>";
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <p class="mt-2 text-sm font-medium text-gray-500">Nilai</p>
+                </div>
+            </a>
+            <!-- Santri Nilai -->
+            <a href="index.php?modul=asSantri&fitur=absen">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Absen</p>
                 </div>
             </a>
 

@@ -101,6 +101,37 @@ class SantriModel
         return null;
     }
 
+    public function getSantriByKelasId($kelasId)
+    {
+        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE idKelas = ?");
+        $stmt->bind_param("i", $kelasId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $santris = [];
+        while ($santri = $result->fetch_assoc()) {
+            $role = $this->roleModel->getRoleById(3);
+            $kelas = $this->kelasModel->getKelasById($santri['idKelas']);
+
+            $santris[] = [
+                'id' => $santri['id'],
+                'username' => $santri['username'],
+                'password' => $santri['password'],
+                'roleId' => $role,
+                'santriJenisKelamin' => $santri['santriJenisKelamin'],
+                'santriTempatTglLahir' => $santri['santriTempatTglLahir'],
+                'santriAlamat' => $santri['santriAlamat'],
+                'santriNamaOrtu' => $santri['santriNamaOrtu'],
+                'santriNoTelpOrtu' => $santri['santriNoTelpOrtu'],
+                'santriGajiOrtu' => $santri['santriGajiOrtu'],
+                'idKelas' => $kelas
+            ];
+        }
+        $stmt->close();
+
+        return $santris;
+    }
+
 
     public function getSantriByUsername($username)
     {
@@ -129,5 +160,14 @@ class SantriModel
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
+    }
+
+    public function getSantriByKelas($idKelas)
+    {
+        $stmt = $this->mysqli->prepare("SELECT * FROM santris WHERE idKelas = ?");
+        $stmt->bind_param("i", $idKelas);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $santris = [];
     }
 }

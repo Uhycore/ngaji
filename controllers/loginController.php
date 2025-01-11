@@ -1,22 +1,31 @@
 <?php
-include_once 'models/santriModel.php';
-include_once 'models/guruModel.php';
-include_once 'models/adminModel.php';
-include_once 'models/bendaharaModel.php';
+require_once 'models/roleModel.php';
+require_once 'models/adminModel.php';
+require_once 'models/guruModel.php';
+require_once 'models/santriModel.php';
+require_once 'models/bendaharaModel.php';
+require_once 'models/mapelModel.php';
+require_once 'models/kelasModel.php';
 
 class loginController
 {
-    private $santriModel;
-    private $guruModel;
+    private $roleModel;
     private $adminModel;
+    private $guruModel;
+    private $santriModel;
     private $bendaharaModel;
+    private $mapelModel;
+    private $kelasModel;
 
     public function __construct()
     {
-        $this->santriModel = new SantriModel();
-        $this->guruModel = new GuruModel();
+        $this->roleModel = new RoleModel();
         $this->adminModel = new AdminModel();
+        $this->guruModel = new GuruModel();
+        $this->santriModel = new SantriModel();
         $this->bendaharaModel = new BendaharaModel();
+        $this->mapelModel = new MapelModel();
+        $this->kelasModel = new KelasModel();
     }
 
     public function login()
@@ -37,12 +46,12 @@ class loginController
             exit();
         } elseif ($santri && $santri['password'] == $password && $santri['roleId'] == 3) {
             $objSantri = $this->santriModel->getSantriById($santri['id']);
-           
+
             $_SESSION['username_login'] = $objSantri;
             header("Location: index.php?modul=null");
             exit();
         } elseif ($guru && $guru['password'] == $password && $guru['roleId'] == 2) {
-            $objGuru = $this->guruModel->getGuruById($guru['guruId']);
+            $objGuru = $this->guruModel->getGuruById($guru['id']);
             $_SESSION['username_login'] = $objGuru;
             header("Location: index.php?modul=null");
             exit();
@@ -87,7 +96,16 @@ class loginController
             include 'views/guru/guruDashboard.php';
             exit();
         } elseif (isset($_SESSION['username_login']) && $_SESSION['username_login']['roleId']['roleId'] == 1) {
-            include 'views/role/roleDashboard.php';
+
+            $role = $this->roleModel->getAllRoles();
+            $admin = $this->adminModel->getAllAdmins();
+            $guru = $this->guruModel->getAllGurus();
+            $santri = $this->santriModel->getAllSantri();
+            $bendahara = $this->bendaharaModel->getAllBendaharas();
+            $mapel = $this->mapelModel->getAllMapel();
+            $kelas = $this->kelasModel->getAllKelas();
+
+            include 'views/admin/adminDashboard.php';
             exit();
         }
         include 'views/items/login.php';

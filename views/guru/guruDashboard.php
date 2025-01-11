@@ -1,8 +1,4 @@
-<?php
-echo "<pre>";
-print_r($_SESSION['username_login']);
-echo "</pre>";
-?>
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -50,7 +46,26 @@ echo "</pre>";
                     <p class="mt-2 text-sm font-medium text-gray-500">Add Nilai Santri</p>
                 </div>
             </a>
-            
+
+            <!-- List Absen -->
+            <a href="index.php?modul=absen&fitur=list">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">List Absen</p>
+                </div>
+            </a>
+
+            <!-- Add Absen -->
+            <a href="index.php?modul=absen&fitur=input">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg hover:bg-green-400 transform hover:scale-110 transition-all duration-200">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <p class="mt-2 text-sm font-medium text-gray-500">Add Absen</p>
+                </div>
+            </a>
         </div>
     </div>
 </body>

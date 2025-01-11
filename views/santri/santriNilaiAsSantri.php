@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -22,7 +23,11 @@
         <h2 class="text-2xl font-semibold text-blue-800 mb-6 border-b border-gray-300 pb-2">Nilai Santri</h2>
 
         <!-- Jika Tidak Ada Nilai -->
+        <?php foreach ($nilai as $nilai) ?>
+
+
         <?php if (empty($nilai->detailNilai)): ?>
+
             <p class="text-gray-600">Masih kosong</p>
         <?php else: ?>
             <!-- Tabel Nilai -->
@@ -49,6 +54,8 @@
                 </table>
             </div>
         <?php endif; ?>
+
+
     </div>
 
 </body>

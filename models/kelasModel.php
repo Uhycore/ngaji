@@ -90,6 +90,29 @@ class KelasModel
 
         return null;
     }
+    public function getKelasByGuruId($guruId)
+    {
+        $stmt = $this->mysqli->prepare("SELECT * FROM kelas WHERE guruId = ?");
+        $stmt->bind_param("i", $guruId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($row) {
+
+            $guru = $this->guruModel->getGuruById($row['guruId']);
+
+            return [
+                'id' => $row['id'],
+                'namaKelas' => $row['namaKelas'],
+                'guru' => $guru
+            ];
+        }
+
+        return null;
+    }
+
 
 
 

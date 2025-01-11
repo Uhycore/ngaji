@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,7 +45,6 @@
                                 <?php
                                 $nilaiValue = 0; // Nilai default
                                 if ($objNilai && isset($objNilai->detailNilai)) {
-                                    // Loop melalui detailNilai untuk mencari nilai yang sesuai dengan mapelId
                                     foreach ($objNilai->detailNilai as $detail) {
                                         if ($detail->mapel->mapelId == $mapel->mapelId) {
                                             $nilaiValue = $detail->nilai; // Set nilai jika ditemukan

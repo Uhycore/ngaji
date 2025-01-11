@@ -1,13 +1,16 @@
 <?php
 require_once 'models/mapelModel.php';
+require_once 'models/kelasModel.php';
 
 class MapelController
 {
     protected $mapelModel;
+    protected $kelasModel;
 
     public function __construct()
     {
         $this->mapelModel = new MapelModel();
+        $this->kelasModel = new KelasModel();
     }
 
     public function listMapels()
@@ -18,6 +21,18 @@ class MapelController
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+        exit;
+    }
+    public function inputMapels()
+    {
+        try {
+            $objKelas = $this->kelasModel->getAllKelas();
+            include 'views/items/mapelInput.php';
+        
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        exit;
     }
 
     public function addMapels()
@@ -25,19 +40,21 @@ class MapelController
         try {
             $mapelNama = $_POST['mapelNama'];
             $mapelDeskripsi = $_POST['mapelDeskripsi'];
-            $this->mapelModel->addMapel($mapelNama, $mapelDeskripsi);
+            $kelasId = $_POST['kelasId'];
+            $this->mapelModel->addMapel($mapelNama, $mapelDeskripsi, $kelasId);
 
             echo "<script>
                     alert('Data mapel berhasil ditambahkan!');
                     window.location.href = 'index.php?modul=mapel&fitur=list';
                  </script>";
-            header('location: index.php?modul=mapel&fitur=list');
+
         } catch (Exception $e) {
             echo "<script>
                     alert('Gagal menambahkan data mapel. Error: " . $e->getMessage() . "');
                     window.history.back();
                  </script>";
         }
+        exit;
     }
 
     public function editById()
@@ -45,11 +62,13 @@ class MapelController
         try {
             $mapelId = $_GET['mapelId'];
             $objMapels = $this->mapelModel->getMapelById($mapelId);
+            $objKelas = $this->kelasModel->getAllKelas();
 
             include 'views/items/mapelUpdate.php';
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+        exit;
     }
 
     public function updateMapels()
@@ -58,7 +77,8 @@ class MapelController
             $mapelId = $_POST['mapelId'];
             $mapelNama = $_POST['mapelNama'];
             $mapelDeskripsi = $_POST['mapelDeskripsi'];
-            $this->mapelModel->updateMapel($mapelId, $mapelNama, $mapelDeskripsi);
+            $kelasId = $_POST['kelasId'];
+            $this->mapelModel->updateMapel($mapelId, $mapelNama, $mapelDeskripsi, $kelasId);
             echo "<script>
                         alert('Data mapel berhasil diperbarui!');
                         window.location.href = 'index.php?modul=mapel&fitur=list'; 
@@ -88,5 +108,6 @@ class MapelController
                     window.location.href = 'index.php?modul=mapel&fitur=list';
                  </script>";
         }
+        exit;
     }
 }

@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -89,7 +90,7 @@
                         <span class="font-semibold text-gray-700">Kelas</span>
                     </div>
                     <div class="text-left pl-4 col-span-5">
-                        <span class="text-gray-800"><?php echo htmlspecialchars($guru['guruKelas']); ?></span>
+                        <span class="text-gray-800"><?php echo htmlspecialchars($kelas['namaKelas']); ?></span>
                     </div>
                 </div>
 

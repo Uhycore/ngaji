@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,13 +20,13 @@
             <div class="text-center">
                 <img id="animationLogo" class="mb-4 w-24 h-24 rounded-full ml-0" src="assets/profil.jpg" alt="Logo TPQ">
 
-                <!-- <h2 class="text-2xl sm:text-3xl font-semibold text-left">Selamat Datang di TPQ AL-Qohol</h2>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-left">Selamat Datang di TPQ AL-Qohol</h2>
                 <p class="mt-2 text-base sm:text-lg lg:text-xl text-left">Hai! Silakan cek informasi berikut, ya...</p>
                 <ul class="mt-2 text-left list-disc pl-5 text-sm sm:text-base lg:text-lg">
                     <li>Mahasiswa baru <strong>S-1 reguler</strong> tidak perlu mengentri KRS secara mandiri. KRS akan terisi otomatis (paket) pada Semester 1.</li>
                     <li>Mahasiswa <strong>lama dan baru S-1 jalur RPL dan S-2</strong> dapat mengentri KRS mandiri dan berkoordinasi dengan Dosen Wali.</li>
                     <li>Mahasiswa program <strong>MBKM</strong> dapat merencanakan konversi mata kuliah melalui <a href="https://mbkm.itats.ac.id" class="text-yellow-200 underline" target="_blank">SIM-MBKM</a>.</li>
-                </ul> -->
+                </ul>
             </div>
         </div>
 

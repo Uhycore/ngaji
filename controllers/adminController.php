@@ -1,8 +1,8 @@
 <?php
-
+require_once 'interface.php';
 require_once 'models/adminModel.php';
 
-class AdminController
+class AdminController implements userControllerInterface
 {
     private $adminModel;
 
@@ -11,7 +11,8 @@ class AdminController
         $this->adminModel = new AdminModel();
     }
 
-    public function listAdmins()
+
+    public function listUsers()
     {
         try {
             $admins = $this->adminModel->getAllAdmins();
@@ -22,7 +23,7 @@ class AdminController
         }
     }
 
-    public function addAdmins()
+    public function addUser()
     {
         try {
             $username = $_POST['username'];
@@ -58,7 +59,7 @@ class AdminController
         }
     }
 
-    public function updateAdmins()
+    public function updateUser()
     {
         try {
             $adminId = $_POST['adminId'];
@@ -83,7 +84,7 @@ class AdminController
         exit;
     }
 
-    public function deleteAdmins()
+    public function deleteUser()
     {
         try {
             $adminId = $_POST['adminId'];

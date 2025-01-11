@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -87,7 +88,7 @@
                     <div>
                         <label for="idKelas" class="block text-gray-600 text-sm font-semibold mb-2">Kelas</label>
                         <select id="idKelas" name="idKelas" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md" required>
-                            
+
                             <?php foreach ($kelas as $kelasItem): ?>
                                 <option value="<?= $kelasItem['id']; ?>" <?= (isset($santri['idKelas']) && $santri['idKelas'] == $kelasItem['id']) ? 'selected' : ''; ?>>
                                     <?= $kelasItem['namaKelas']; ?>

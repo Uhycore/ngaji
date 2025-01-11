@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,8 +40,16 @@
                         <textarea id="mapelDeskripsi" name="mapelDeskripsi" class="w-full px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none transition duration-200 hover:shadow-md"
                             placeholder="Masukkan Deskripsi Mapel" rows="3" required></textarea>
                     </div>
+                    <div class="mb-4">
+                        <label for="kelasId" class="block text-sm font-medium text-gray-700">Pilih kelas</label>
+                        <select id="kelasId" name="kelasId" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                            <?php foreach ($objKelas as $kelas): ?>
+                                <option value="<?= $kelas['id'] ?>"><?= $kelas['namaKelas'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                
+
 
                     <!-- Submit Button -->
                     <div class="flex justify-center mt-6">

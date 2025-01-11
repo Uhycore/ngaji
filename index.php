@@ -6,6 +6,7 @@ require_once 'controllers/guruController.php';
 require_once 'controllers/bendaharaController.php';
 require_once 'controllers/mapelController.php';
 require_once 'controllers/kelasController.php';
+require_once 'controllers/absenController.php';
 require_once 'controllers/nilaiController.php';
 require_once 'controllers/keuanganController.php';
 
@@ -14,11 +15,14 @@ require_once 'controllers/loginController.php';
 require_once 'models/santriModel.php';
 require_once 'models/nilaiModel.php';
 require_once 'models/keuanganModel.php';
+require_once 'models/kelasModel.php';
+require_once 'models/absenModel.php';
 
 
 
 session_start();
 
+$_SESSION['username_login'] = isset($_SESSION['username_login']) ? $_SESSION['username_login'] : null;
 
 $modul = isset($_GET['modul']) ? $_GET['modul'] : null;
 
@@ -29,6 +33,7 @@ $objGuru = new GuruController();
 $objBendahara = new BendaharaController();
 $objMapel = new MapelController();
 $objKelas = new KelasController();
+$objAbsen = new AbsenController();
 $objNilai = new NilaiController();
 $objKeuangan = new KeuanganController();
 
@@ -37,6 +42,8 @@ $objLogin = new loginController();
 $santri = new SantriModel();
 $nilai = new NilaiModel();
 $keuangan = new KeuanganModel();
+$kelas = new KelasModel();
+$absen = new AbsenModel();
 
 
 
@@ -78,25 +85,25 @@ switch ($modul) {
 
         switch ($fitur) {
             case 'list':
-                $objAdmin->listAdmins();
+                $objAdmin->listUsers();
                 break;
             case 'input':
                 include 'views/admin/adminInput.php';
                 break;
             case 'add':
-                $objAdmin->addAdmins();
+                $objAdmin->addUser();
                 break;
             case 'edit':
                 $objAdmin->editById();
                 break;
             case 'update':
-                $objAdmin->updateAdmins();
+                $objAdmin->updateUser();
                 break;
             case 'delete':
-                $objAdmin->deleteAdmins();
+                $objAdmin->deleteUser();
                 break;
             default:
-                $objAdmin->listAdmins();
+                $objAdmin->listUsers();
                 break;
         }
         break;
@@ -133,25 +140,25 @@ switch ($modul) {
 
         switch ($fitur) {
             case 'list':
-                $objGuru->listGurus();
+                $objGuru->listUsers();
                 break;
             case 'input':
                 include 'views/guru/guruInput.php';
                 break;
             case 'add':
-                $objGuru->addGurus();
+                $objGuru->addUser();
                 break;
             case 'edit':
                 $objGuru->editById();
                 break;
             case 'update':
-                $objGuru->updateGurus();
+                $objGuru->updateUser();
                 break;
             case 'delete':
-                $objGuru->deleteGurus();
+                $objGuru->deleteUser();
                 break;
             default:
-                $objGuru->listGurus();
+                $objGuru->listUsers();
                 break;
         }
         break;
@@ -191,7 +198,7 @@ switch ($modul) {
                 $objMapel->listMapels();
                 break;
             case 'input':
-                include 'views/items/mapelInput.php';
+                $objMapel->inputMapels();
                 break;
             case 'add':
                 $objMapel->addMapels();
@@ -205,7 +212,11 @@ switch ($modul) {
             case 'delete':
                 $objMapel->deleteMapels();
                 break;
+            case 'default':
+                $objMapel->listMapels();
+                break;
         }
+        $objMapel->listMapels();
         break;
 
     case 'kelas':
@@ -215,7 +226,7 @@ switch ($modul) {
         switch ($fitur) {
             case 'list':
                 $objKelas->listKelas();
-                break;    
+                break;
             case 'input':
                 $objKelas->inputKelas();
                 break;
@@ -230,6 +241,34 @@ switch ($modul) {
                 break;
             case 'delete':
                 $objKelas->deleteKelas();
+                break;
+            case 'default':
+                $objKelas->listKelas();
+                break;
+        }
+        $objKelas->listKelas();
+        break;
+    case 'absen':
+        $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
+
+        switch ($fitur) {
+            case 'list':
+                $objAbsen->listAbsen();
+                break;
+            case 'input':
+                $objAbsen->inputAbsen();
+                break;
+            case 'add':
+                $objAbsen->addAbsen();
+                break;
+            case 'edit':
+                $objAbsen->editAbsen();
+                break;
+            case 'update':
+                $objAbsen->updateAbsen();
+                break;
+            case 'delete':
+                $objAbsen->deleteAbsen();
                 break;
         }
         break;
@@ -250,6 +289,7 @@ switch ($modul) {
                 $objNilai->listNilais();
                 break;
         }
+        $objNilai->listNilais();
         break;
     case 'keuangan':
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
@@ -278,7 +318,13 @@ switch ($modul) {
                 break;
             case 'nilai':
                 $nilai = $nilai->getNilaiBySantriId($santri['id']);
+
                 include 'views/santri/santriNilaiAsSantri.php';
+                break;
+            case 'absen':
+                $absen = $absen->getAbsenBySantriId($santri['id']);
+
+                include 'views/santri/santriAbsenAsSantri.php';
                 break;
             case 'keuangan':
                 $keuangan = $keuangan->getKeuanganById($santri['id']);
@@ -291,6 +337,7 @@ switch ($modul) {
         break;
     case 'asGuru':
         $guru = $_SESSION['username_login'];
+        $kelas = $kelas->getKelasByGuruId($guru['id']);
         $fitur = isset($_GET['fitur']) ? $_GET['fitur'] : null;
         switch ($fitur) {
             case 'profil':

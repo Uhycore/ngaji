@@ -1,3 +1,4 @@
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,6 +39,14 @@
                         <label for="mapelDeskripsi" class="block text-gray-600 text-sm font-semibold mb-2">mapel Deskripsi:</label>
                         <textarea id="mapelDeskripsi" name="mapelDeskripsi" class="shadow border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out hover:shadow-md"
                             placeholder="Masukkan Deskripsi Mapel" rows="3" required><?php echo isset($objMapels->mapelDeskripsi) ? htmlspecialchars($objMapels->mapelDeskripsi) : ''; ?></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="kelasId" class="block text-sm font-medium text-gray-700">Pilih kelas</label>
+                        <select id="kelasId" name="kelasId" class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                            <?php foreach ($objKelas as $kelas): ?>
+                                <option value="<?= $kelas['id'] ?>"><?= $kelas['namaKelas'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
 

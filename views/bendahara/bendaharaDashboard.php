@@ -1,8 +1,4 @@
-<?php
-echo "<pre>";
-print_r($_SESSION['username_login']);
-echo "</pre>";
-?>
+<?php require_once 'service/auth.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 

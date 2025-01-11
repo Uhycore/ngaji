@@ -1,6 +1,12 @@
 <?php
 
-class Mapel
+abstract class BaseEntity
+{
+
+    abstract public function getInfo();
+}
+
+class Mapel extends BaseEntity
 {
     public $mapelId;
     public $mapelNama;
@@ -14,4 +20,15 @@ class Mapel
         $this->mapelDeskripsi = $mapelDeskripsi;
         $this->kelasId = $kelasId;
     }
+
+    public function getInfo()
+    {
+        return [
+            'mapelId' => $this->mapelId,
+            'mapelNama' => $this->mapelNama,
+            'mapelDeskripsi' => $this->mapelDeskripsi,
+            'kelasId' => $this->kelasId,
+        ];
+    }
 }
+

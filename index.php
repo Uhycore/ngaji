@@ -327,7 +327,8 @@ switch ($modul) {
                 include 'views/santri/santriAbsenAsSantri.php';
                 break;
             case 'keuangan':
-                $keuangan = $keuangan->getKeuanganById($santri['id']);
+                $keuangan = $keuangan->getKeuanganBySantriId($santri['id']);
+                
                 include 'views/santri/santriKeuanganAsSantri.php';
                 break;
             default:

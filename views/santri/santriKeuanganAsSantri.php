@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="id">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,31 +24,37 @@
         <h2 class="text-2xl font-semibold text-blue-800 mb-6 border-b border-gray-300 pb-2">Keuangan Santri</h2>
 
         <!-- Jika Tidak Ada Data Keuangan -->
-        <?php if (empty($keuangan->detailKeuangan)): ?>
+        <?php if (empty($keuangan)): ?>
             <p class="text-gray-600">Masih kosong</p>
         <?php else: ?>
-            <!-- Tabel Keuangan -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full table-auto border-collapse text-gray-700">
-                    <thead class="bg-blue-100 text-gray-700 border-b border-gray-300">
-                        <tr>
-                            <th class="px-1 py-3 text-center border-r border-gray-300">No transaksi</th>
-                            <th class="px-6 py-3 text-left border-r border-gray-300">Tanggal</th>
-                            <th class="px-6 py-3 text-left border-r border-gray-300">Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($keuangan->detailKeuangan as $detailKeuangan): ?>
-                            <tr class="border-b border-gray-300 hover:bg-gray-50 transition duration-300">
-                                <td class="px-1 py-3 text-center border-r border-gray-300"><?php echo htmlspecialchars($detailKeuangan->detailKeuanganId); ?></td>
-                                <td class="px-6 py-3 border-r border-gray-300"><?php echo htmlspecialchars($detailKeuangan->tanggal); ?></td>
-                                <td class="px-6 py-3">Rp <?php echo number_format($detailKeuangan->nominal, 0, ',', '.'); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+            <?php foreach ($keuangan as $k): ?>
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-blue-700 mb-2">ID Keuangan: <?= $k->keuanganId ?></h3>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full table-auto border-collapse text-gray-700">
+                            <thead class="bg-blue-100 text-gray-700 border-b border-gray-300">
+                                <tr>
+                                    <th class="px-1 py-3 text-center border-r border-gray-300">No transaksi</th>
+                                    <th class="px-6 py-3 text-left border-r border-gray-300">Tanggal</th>
+                                    <th class="px-6 py-3 text-left border-r border-gray-300">Nominal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($k->detailKeuangan as $detail): ?>
+                                    <tr class="border-b border-gray-300 hover:bg-gray-50 transition duration-300">
+                                        <td class="px-1 py-3 text-center border-r border-gray-300"><?= htmlspecialchars($detail->detailKeuanganId) ?></td>
+                                        <td class="px-6 py-3 border-r border-gray-300"><?= htmlspecialchars($detail->tanggal) ?></td>
+                                        <td class="px-6 py-3">Rp <?= number_format($detail->nominal, 0, ',', '.') ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
+
     </div>
 
 </body>

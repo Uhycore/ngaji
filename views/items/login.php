@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,13 +19,14 @@
             <div class="text-center">
                 <img id="animationLogo" class="mb-4 w-24 h-24 rounded-full ml-0" src="assets/profil.jpg" alt="Logo TPQ">
 
-                <h2 class="text-2xl sm:text-3xl font-semibold text-left">Selamat Datang di TPQ AL-Qohol</h2>
-                <p class="mt-2 text-base sm:text-lg lg:text-xl text-left">Hai! Silakan cek informasi berikut, ya...</p>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-left">Selamat Datang di TPQ AL-Aril</h2>
+                <p class="mt-2 text-base sm:text-lg lg:text-xl text-left">Hai! Yuk, simak beberapa informasi penting berikut ini...</p>
                 <ul class="mt-2 text-left list-disc pl-5 text-sm sm:text-base lg:text-lg">
-                    <li>Mahasiswa baru <strong>S-1 reguler</strong> tidak perlu mengentri KRS secara mandiri. KRS akan terisi otomatis (paket) pada Semester 1.</li>
-                    <li>Mahasiswa <strong>lama dan baru S-1 jalur RPL dan S-2</strong> dapat mengentri KRS mandiri dan berkoordinasi dengan Dosen Wali.</li>
-                    <li>Mahasiswa program <strong>MBKM</strong> dapat merencanakan konversi mata kuliah melalui <a href="https://mbkm.itats.ac.id" class="text-yellow-200 underline" target="_blank">SIM-MBKM</a>.</li>
+                    <li>Santri <strong>baru</strong> tidak perlu memilih kelas secara mandiri. Kelas akan ditentukan secara otomatis oleh pengurus pada awal semester.</li>
+                    <li>Santri <strong>lama</strong> dapat mengajukan perubahan kelas atau jadwal dengan berkoordinasi bersama Ustadz/Ustadzah pembimbing.</li>
+                    <li>Santri yang mengikuti program <strong>ekstrakurikuler</strong> bisa berkonsultasi mengenai jadwal tambahan melalui <a href="#" class="text-yellow-200 underline" target="_blank">Halaman Ekstrakurikuler</a>.</li>
                 </ul>
+
             </div>
         </div>
 
@@ -48,14 +48,14 @@
                     <!-- Username Input -->
                     <div>
                         <label for="username" class="block text-sm font-semibold text-gray-700">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Contoh: Ariladmin" class="w-full px-3 py-2 bg-green-100 border border-gray-300 rounded-md text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <input type="text" id="username" name="username" placeholder="Contoh: Arilsantri" class="w-full px-3 py-2 bg-green-100 border border-gray-300 rounded-md text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     </div>
 
                     <!-- Password Input -->
                     <div>
                         <label for="password" class="block text-sm font-semibold text-gray-700">Kata Sandi</label>
                         <input type="password" id="password" name="password" placeholder="contoh: 2005-05-15" class="w-full px-3 py-2 bg-green-100 border border-gray-300 rounded-md text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <p class="text-xs text-gray-500 mt-1">1</p>
+                        <!-- <p class="text-xs text-gray-500 mt-1">1</p> -->
                     </div>
 
                     <!-- Submit Button -->
@@ -74,7 +74,7 @@
                 <div class="text-center text-gray-500 text-sm flex flex-col items-center space-y-2">
                     <p>TPQ</p>
                     <div class="flex space-x-2">
-                        <p>© 2024 DSI ITATS</p>
+                        <p>©2024 Uhycode</p>
                         <a href="#" class="text-blue-500 hover:underline">Privacy Policy</a>
                     </div>
                 </div>

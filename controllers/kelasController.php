@@ -28,9 +28,11 @@ class kelasController
         try {
             $gurus = $this->guruModel->getAllGurus();
             include 'views/items/kelasInput.php';
+
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+        exit;
     }
 
     public function addKelas()

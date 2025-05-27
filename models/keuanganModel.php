@@ -20,14 +20,12 @@ class KeuanganModel
     // Menambahkan data keuangan dan detail keuangan
     public function addKeuangan($santriId, $detailKeuanganData)
     {
-        // Insert ke tabel keuangan
         $stmt = $this->mysqli->prepare("INSERT INTO keuangan (santriId) VALUES (?)");
         $stmt->bind_param("i", $santriId);
         if ($stmt->execute()) {
-            $keuanganId = $stmt->insert_id; // Dapatkan ID keuangan baru
+            $keuanganId = $stmt->insert_id;
             $stmt->close();
 
-            // Insert ke tabel detail_keuangan
             foreach ($detailKeuanganData as $detail) {
                 $tanggal = $detail->tanggal;
                 $nominal = $detail->nominal;
@@ -83,6 +81,7 @@ class KeuanganModel
         $row = $result->fetch_assoc();
         $stmt->close();
 
+
         if ($row) {
             $santriId = $row['santriId'];
             $santri = (new SantriModel())->getSantriById($santriId);
@@ -105,5 +104,41 @@ class KeuanganModel
         }
 
         return null;
+    }
+    public function getKeuanganBySantriId($santriId)
+    {
+        $stmt = $this->mysqli->prepare("SELECT * FROM keuangan WHERE santriId = ?");
+        $stmt->bind_param("i", $santriId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $keuanganList = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $keuanganId = $row['keuanganId'];
+
+            // Ambil detail keuangan
+            $detailResult = $this->mysqli->query("SELECT * FROM detail_keuangan WHERE keuanganId = $keuanganId");
+            $detailKeuangan = [];
+            while ($detailRow = $detailResult->fetch_assoc()) {
+                $detailKeuangan[] = new DetailKeuanganNode(
+                    $detailRow['detailKeuanganId'],
+                    $detailRow['tanggal'],
+                    $detailRow['nominal']
+                );
+            }
+
+            // Ambil data santri (boleh dioptimasi jika kamu yakin santriId sama)
+            $santri = (new SantriModel())->getSantriById($santriId);
+
+            $keuanganNode = new KeuanganNode($keuanganId, $santri);
+            $keuanganNode->detailKeuangan = $detailKeuangan;
+
+            $keuanganList[] = $keuanganNode;
+        }
+
+        $stmt->close();
+
+        return $keuanganList;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+require_once 'database/koneksi.php';
 
 require_once 'models/nilaiModel.php';
 require_once 'models/santriModel.php';
@@ -12,12 +13,12 @@ class NilaiController
     protected $mapelModel;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->nilaiModel = new NilaiModel();
-        $this->santriModel = new SantriModel();
-        $this->mapelModel = new MapelModel();
-        $this->kelasModel = new KelasModel();
+        $this->nilaiModel = new NilaiModel($mysqli);
+        $this->santriModel = new SantriModel($mysqli);
+        $this->mapelModel = new MapelModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
     }
 
     public function listNilais()

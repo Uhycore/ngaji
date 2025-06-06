@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'roleModel.php';
 require_once 'kelasModel.php';
 
@@ -8,16 +10,13 @@ class SantriModel
     private $roleModel;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
-
-        $this->roleModel = new RoleModel();
-        $this->kelasModel = new KelasModel();
+      
+        $this->roleModel = new RoleModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
 
         $result = $this->mysqli->query("SELECT COUNT(*) FROM santris");
         $count = $result->fetch_row()[0];

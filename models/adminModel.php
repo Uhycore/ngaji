@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'roleModel.php';
 
 class AdminModel
@@ -6,15 +8,15 @@ class AdminModel
     private $mysqli;
     private $roleModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
         if ($this->mysqli->connect_error) {
             die("Connection failed: " . $this->mysqli->connect_error);
         }
 
-        $this->roleModel = new RoleModel();
+        $this->roleModel = new RoleModel($mysqli);
 
         $result = $this->mysqli->query("SELECT COUNT(*) FROM admins");
         $count = $result->fetch_row()[0];

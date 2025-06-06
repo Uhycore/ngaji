@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'config/detailKeuanganNode.php';
 require_once 'config/keuanganNode.php';
 require_once 'santriModel.php';
@@ -7,14 +9,12 @@ class KeuanganModel
 {
     private $mysqli;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
         // Koneksi ke database MySQL
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
+        
     }
 
     // Menambahkan data keuangan dan detail keuangan
@@ -61,7 +61,7 @@ class KeuanganModel
                 );
             }
 
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
             $keuanganNode = new KeuanganNode($keuanganId, $santri);
             $keuanganNode->detailKeuangan = $detailKeuangan;
 
@@ -84,7 +84,7 @@ class KeuanganModel
 
         if ($row) {
             $santriId = $row['santriId'];
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
 
             // Ambil detail keuangan
             $detailResult = $this->mysqli->query("SELECT * FROM detail_keuangan WHERE keuanganId = $keuanganId");
@@ -129,7 +129,7 @@ class KeuanganModel
             }
 
             // Ambil data santri (boleh dioptimasi jika kamu yakin santriId sama)
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
 
             $keuanganNode = new KeuanganNode($keuanganId, $santri);
             $keuanganNode->detailKeuangan = $detailKeuangan;

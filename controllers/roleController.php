@@ -1,14 +1,15 @@
 <?php
 
 require_once 'models/roleModel.php';
+require_once 'database/koneksi.php';
 
 class RoleController
 {
     private $roleModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->roleModel = new RoleModel();
+        $this->roleModel = new RoleModel($mysqli);
     }
 
     public function listRoles()

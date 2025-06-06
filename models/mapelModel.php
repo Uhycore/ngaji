@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'kelasModel.php';
 require_once 'config/mapelNode.php';
 class MapelModel
@@ -6,15 +8,12 @@ class MapelModel
     private $mysqli;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
-
-        $this->kelasModel = new KelasModel();
+        
+        $this->kelasModel = new KelasModel($mysqli);
 
         $result = $this->mysqli->query("SELECT COUNT(*) FROM mapels");
         $count = $result->fetch_row()[0];

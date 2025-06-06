@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'interface.php';
 require_once 'models/adminModel.php';
 
@@ -6,9 +8,9 @@ class AdminController implements userControllerInterface
 {
     private $adminModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->adminModel = new AdminModel();
+        $this->adminModel = new AdminModel($mysqli);
     }
 
 

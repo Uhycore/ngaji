@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'guruModel.php';
 
 class KelasModel
@@ -6,15 +8,12 @@ class KelasModel
     private $mysqli;
     private $guruModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
 
-        $this->guruModel = new GuruModel();
+        $this->guruModel = new GuruModel($mysqli);
 
         $result = $this->mysqli->query("SELECT COUNT(*) FROM kelas");
         $count = $result->fetch_row()[0];

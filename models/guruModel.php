@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'roleModel.php';
 
 class GuruModel
@@ -6,15 +8,13 @@ class GuruModel
     private $mysqli;
     private $roleModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
+      
 
-        $this->roleModel = new RoleModel();
+        $this->roleModel = new RoleModel($mysqli);
 
         // Inisialisasi data default jika tabel kosong
         $result = $this->mysqli->query("SELECT COUNT(*) FROM gurus");

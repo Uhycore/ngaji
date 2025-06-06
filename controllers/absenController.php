@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/absenModel.php';
 require_once 'models/kelasModel.php';
 require_once 'models/santriModel.php';
@@ -9,11 +11,11 @@ class AbsenController
     private $kelasModel;
     private $santriModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->absenModel = new AbsenModel();
-        $this->kelasModel = new KelasModel();
-        $this->santriModel = new SantriModel();
+        $this->absenModel = new AbsenModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
+        $this->santriModel = new SantriModel($mysqli);
     }
 
     public function listAbsen()

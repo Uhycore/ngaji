@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'interface.php';
 require_once 'models/guruModel.php';
 
@@ -6,9 +8,9 @@ class GuruController implements userControllerInterface
 {
     private $guruModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->guruModel = new GuruModel();
+        $this->guruModel = new GuruModel($mysqli);
     }
 
     public function listUsers()

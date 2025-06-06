@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/mapelModel.php';
 require_once 'models/kelasModel.php';
 
@@ -7,10 +9,10 @@ class MapelController
     protected $mapelModel;
     protected $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mapelModel = new MapelModel();
-        $this->kelasModel = new KelasModel();
+        $this->mapelModel = new MapelModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
     }
 
     public function listMapels()

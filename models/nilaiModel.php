@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'config/detailNilaiNode.php';
 require_once 'config/nilaiNode.php';
 require_once 'santriModel.php';
@@ -9,15 +11,11 @@ class NilaiModel
     private $mysqli;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
-
-        $this->kelasModel = new KelasModel();
+        $this->kelasModel = new KelasModel($mysqli);
     }
 
 
@@ -119,7 +117,7 @@ class NilaiModel
                 $detailNilai[] = new DetailNilaiNode($detailRow['id'], $mapel, $detailRow['nilai']);
             }
 
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
             $nilaiNode = new NilaiNode($santriId, $santri);
             $nilaiNode->detailNilai = $detailNilai;
 
@@ -140,7 +138,7 @@ class NilaiModel
 
         if ($row) {
             $santriId = $row['santriId'];
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
 
             $detailNilaiResult = $this->mysqli->query("SELECT dn.*, m.mapelNama FROM detail_nilai dn 
                                            JOIN mapels m ON m.id = dn.mapelId
@@ -199,7 +197,7 @@ class NilaiModel
 
             $detailNilaiStmt->close();
 
-            $santri = (new SantriModel())->getSantriById($santriId);
+            $santri = (new SantriModel($this->mysqli))->getSantriById($santriId);
 
             $nilaiNode = new NilaiNode($row['id'], $santri);
             $nilaiNode->detailNilai = $detailNilai;

@@ -1,16 +1,15 @@
 <?php
+require_once 'database/koneksi.php';
 
 class RoleModel
 {
     private $mysqli;
+    
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
-
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
+        
+        $this->mysqli = $mysqli;
 
         $result = $this->mysqli->query("SELECT COUNT(*) FROM roles");
         $count = $result->fetch_row()[0];

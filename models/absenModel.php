@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'config/absenNode.php';
 require_once 'models/santriModel.php';
 
@@ -7,15 +9,13 @@ class AbsenModel
     private $mysqli;
     private $santriModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->mysqli = new mysqli('localhost', 'root', '', 'tpq');
+        $this->mysqli = $mysqli;
 
-        if ($this->mysqli->connect_error) {
-            die("Connection failed: " . $this->mysqli->connect_error);
-        }
+        
 
-        $this->santriModel = new SantriModel();
+        $this->santriModel = new SantriModel($mysqli);
 
         // Inisialisasi data default jika tabel kosong
         $result = $this->mysqli->query("SELECT COUNT(*) FROM absen");

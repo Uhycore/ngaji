@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'controllers/roleController.php';
 require_once 'controllers/adminController.php';
 require_once 'controllers/santriController.php';
@@ -26,24 +28,24 @@ $_SESSION['username_login'] = isset($_SESSION['username_login']) ? $_SESSION['us
 
 $modul = isset($_GET['modul']) ? $_GET['modul'] : null;
 
-$objRoles = new RoleController();
-$objSantri = new SantriController();
-$objAdmin = new AdminController();
-$objGuru = new GuruController();
-$objBendahara = new BendaharaController();
-$objMapel = new MapelController();
-$objKelas = new KelasController();
-$objAbsen = new AbsenController();
-$objNilai = new NilaiController();
-$objKeuangan = new KeuanganController();
+$objRoles = new RoleController($mysqli);
+$objSantri = new SantriController($mysqli);
+$objAdmin = new AdminController($mysqli);
+$objGuru = new GuruController($mysqli);
+$objBendahara = new BendaharaController($mysqli);
+$objMapel = new MapelController($mysqli);
+$objKelas = new KelasController($mysqli);
+$objAbsen = new AbsenController($mysqli);
+$objNilai = new NilaiController($mysqli);
+$objKeuangan = new KeuanganController($mysqli);
 
-$objLogin = new loginController();
+$objLogin = new loginController($mysqli);
 
-$santri = new SantriModel();
-$nilai = new NilaiModel();
-$keuangan = new KeuanganModel();
-$kelas = new KelasModel();
-$absen = new AbsenModel();
+$santri = new SantriModel($mysqli);
+$nilai = new NilaiModel($mysqli);
+$keuangan = new KeuanganModel($mysqli);
+$kelas = new KelasModel($mysqli);
+$absen = new AbsenModel($mysqli);
 
 
 

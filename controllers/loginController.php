@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/roleModel.php';
 require_once 'models/adminModel.php';
 require_once 'models/guruModel.php';
@@ -17,15 +19,15 @@ class loginController
     private $mapelModel;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->roleModel = new RoleModel();
-        $this->adminModel = new AdminModel();
-        $this->guruModel = new GuruModel();
-        $this->santriModel = new SantriModel();
-        $this->bendaharaModel = new BendaharaModel();
-        $this->mapelModel = new MapelModel();
-        $this->kelasModel = new KelasModel();
+        $this->roleModel = new RoleModel($mysqli);
+        $this->adminModel = new AdminModel($mysqli);
+        $this->guruModel = new GuruModel($mysqli);
+        $this->santriModel = new SantriModel($mysqli);
+        $this->bendaharaModel = new BendaharaModel($mysqli);
+        $this->mapelModel = new MapelModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
     }
 
     public function login()

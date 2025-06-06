@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/kelasModel.php';
 require_once 'models/guruModel.php';
 
@@ -7,10 +9,10 @@ class kelasController
     private $kelasModel;
     private $guruModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->kelasModel = new kelasModel();
-        $this->guruModel = new GuruModel();
+        $this->kelasModel = new kelasModel($mysqli);
+        $this->guruModel = new GuruModel($mysqli);
     }
 
     public function listKelas()

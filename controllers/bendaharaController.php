@@ -1,13 +1,15 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/bendaharaModel.php';
 
 class BendaharaController
 {
     private $bendaharaModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->bendaharaModel = new BendaharaModel();
+        $this->bendaharaModel = new BendaharaModel($mysqli);
     }
 
     public function listBendaharas()

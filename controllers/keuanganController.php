@@ -1,4 +1,5 @@
 <?php
+require_once 'database/koneksi.php';
 
 require_once 'models/keuanganModel.php';
 require_once 'models/santriModel.php';
@@ -8,10 +9,10 @@ class KeuanganController
     protected $keuanganModel;
     protected $santriModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->keuanganModel = new KeuanganModel();
-        $this->santriModel = new SantriModel();
+        $this->keuanganModel = new KeuanganModel($mysqli);
+        $this->santriModel = new SantriModel($mysqli);
     }
     public function listKeuangans()
     {

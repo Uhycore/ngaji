@@ -1,4 +1,6 @@
 <?php
+require_once 'database/koneksi.php';
+
 require_once 'models/santriModel.php';
 require_once 'models/kelasModel.php';
 
@@ -7,10 +9,10 @@ class SantriController
     private $santriModel;
     private $kelasModel;
 
-    public function __construct()
+    public function __construct($mysqli)
     {
-        $this->santriModel = new SantriModel();
-        $this->kelasModel = new KelasModel();
+        $this->santriModel = new SantriModel($mysqli);
+        $this->kelasModel = new KelasModel($mysqli);
     }
 
     public function listSantri()
